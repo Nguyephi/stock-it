@@ -1,10 +1,10 @@
 import React from 'react';
-import { SignOut } from './SignOut';
+import { SignOut } from '../organisms/SignOut';
 
 const Dashboard = () => (
-  <div className='flex'>
-    <SignOut />
-  </div>
+    <main className="flex h-full flex-col items-center justify-center bg-sky-400">
+        <SignOut />
+    </main>
 );
 
 export default Dashboard;

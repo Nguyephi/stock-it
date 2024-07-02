@@ -1,10 +1,10 @@
 import React from 'react';
-import { SignIn } from './SignInPage';
+import { SignIn } from '../organisms/SignIn';
 
 const LandingPage = () => (
-  <div>
-    <SignIn />
-  </div>
+    <main className="flex h-full flex-col items-center justify-center bg-sky-400">
+        <SignIn />
+    </main>
 );
 
 export default LandingPage;
