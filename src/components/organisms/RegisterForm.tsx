@@ -10,7 +10,7 @@ export default function RegisterForm() {
                 backButtonHref="/auth/signin"
                 showSocial
             >
-                Sign up form here
+                Register form here
             </CardWrapper>
         </div>
     )

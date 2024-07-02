@@ -2,7 +2,7 @@ import { signOut } from "@/auth"
 import Title from "../atoms/Title";
 import Button from "../atoms/Button";
 
-export function SignOut() {
+export default function SignOut() {
   return (
     <div className="space-y-6 text-center">
       <Title>Sign out</Title>
