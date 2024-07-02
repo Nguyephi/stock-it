@@ -31,7 +31,7 @@ const CardWrapper: React.FC<CardWrapperProps> = ({
                 <div className='space-y-2'>
                     <div className="divider"></div>
                     {showSocial && (
-                        <CardActions className="justify-end">
+                        <CardActions>
                             <SocialsButton />
                         </CardActions>
                     )}
