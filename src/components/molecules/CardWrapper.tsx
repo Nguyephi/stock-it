@@ -31,9 +31,7 @@ const CardWrapper: React.FC<CardWrapperProps> = ({
                 <div className='space-y-2'>
                     <div className="divider"></div>
                     {showSocial && (
-                        <CardActions>
-                            <SocialsButton />
-                        </CardActions>
+                        <SocialsButton />
                     )}
                     <CardActions className="justify-center">
                         <LinkButton

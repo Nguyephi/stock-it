@@ -5,10 +5,10 @@ import Button from "./Button";
 
 const Socials: React.FC = () => {
     return (
-        <div className="space-y-2 w-full">
+        <div className="flex justify-center items-center space-x-2">
             <Button
                 size="small"
-                className="w-full"
+                className="min-w-[50%]"
                 onClick={() => {}}
                 variant="danger"
             >
@@ -16,7 +16,7 @@ const Socials: React.FC = () => {
             </Button>
             <Button
                 size="small"
-                className="w-full"
+                className="min-w-[50%]"
                 onClick={() => {}}
                 variant="danger"
             >
