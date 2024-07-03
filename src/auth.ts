@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "database" },
+  session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
   ...authConfig,
   callbacks: {
