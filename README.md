@@ -19,6 +19,7 @@ Set up an nextjs app with this boilerplate using this tech stack
 - TailwindCSS/DaisyUI
 - NextAuth (version 5 beta)
 - Prisma
+- Supabase
 - PostgreSQL
 - Stripe
 
@@ -46,6 +47,16 @@ Set up an nextjs app with this boilerplate using this tech stack
 
     ```sh
     DATABASE_URL="postgresql://your_name:your_password@localhost:5432/your_db_name"
+    ```
+
+- **Supabase/PostgreSQL:**
+
+    Set up a supabase postgres db
+    [Supabase](https://supabase.com/)
+
+    ```sh
+    - Create a new project > click connect > click ORMs to get prisma credentials
+    - To reset pw go to project settings > under configuration click database > you can reset pw here
     ```
 
 - **Next Auth:**
