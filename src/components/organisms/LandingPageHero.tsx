@@ -8,7 +8,7 @@ export function LandingPageHero() {
   const router = useRouter();
 
   const handleSignin = () => {
-    router.push("/auth/register");
+    router.push("/auth/signin");
   }
 
   return (
