@@ -1,6 +1,7 @@
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import FormField from './FormField';
+import Button from '../atoms/Button';
 
 interface FormProps {
   form: UseFormReturn<any>;
@@ -26,7 +27,7 @@ const Form: React.FC<FormProps> = ({ form, onSubmit, fields }) => {
           placeholder={field.placeholder}
         />
       ))}
-      <button type="submit" className="btn btn-primary mt-2 w-full">Submit</button>
+      <Button type="submit" className="btn-primary mt-2 w-full">Submit</Button>
     </form>
   );
 };

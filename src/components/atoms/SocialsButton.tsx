@@ -7,18 +7,14 @@ const Socials: React.FC = () => {
     return (
         <div className="flex justify-center items-center space-x-2">
             <Button
-                size="small"
-                className="min-w-[50%]"
+                className="min-w-[50%] text-sm btn-outline"
                 onClick={() => {}}
-                variant="danger"
             >
                 <FaGoogle className="h-4 w-4" />
             </Button>
             <Button
-                size="small"
-                className="min-w-[50%]"
+                className="min-w-[50%] text-sm btn-outline"
                 onClick={() => {}}
-                variant="danger"
             >
                 <FaFacebook className="h-4 w-4" />
             </Button>
