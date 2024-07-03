@@ -5,7 +5,7 @@ interface FormItemProps {
   }
 
 const FormItem: React.FC<FormItemProps>= ({ children }) => {
-  return <div className="mb-2">{children}</div>;
+  return <div className="">{children}</div>;
 };
 
 export default FormItem;
