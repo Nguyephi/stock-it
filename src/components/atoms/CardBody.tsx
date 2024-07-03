@@ -8,7 +8,7 @@ interface CardBodyProps {
 
 const CardBody: React.FC<CardBodyProps> = ({ children }) => {
   return (
-    <div className="flex justify-center card-body space-y-6 text-center">{children}</div>
+    <div className="flex justify-center card-body space-y-3 text-center">{children}</div>
   );
 };
 

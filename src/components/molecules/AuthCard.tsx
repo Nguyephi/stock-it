@@ -5,8 +5,9 @@ import CardBody from '../atoms/CardBody';
 import CardActions from '../atoms/CardActions';
 import SocialsButton from '../atoms/SocialsButton';
 import LinkButton from '../atoms/LinkButton';
+import Title from '../atoms/Title';
 
-interface CardWrapperProps {
+interface AuthCardProps {
     children: React.ReactNode;
     headerLabel?: string;
     backButtonLabel: string;
@@ -14,7 +15,7 @@ interface CardWrapperProps {
     showSocial?: boolean;
 }
 
-const CardWrapper: React.FC<CardWrapperProps> = ({
+const AuthCard: React.FC<AuthCardProps> = ({
     children,
     headerLabel,
     backButtonLabel,
@@ -25,11 +26,14 @@ const CardWrapper: React.FC<CardWrapperProps> = ({
         <Card>
             <CardBody>
                 {headerLabel && (
-                    <CardHeader>{headerLabel}</CardHeader>
+                    <div className='space-y-2'>
+                        <Title>🔐</Title>
+                        <CardHeader>{headerLabel}</CardHeader>
+                    </div>
                 )}
                 {children}
+                <div className="divider"></div>
                 <div className='space-y-2'>
-                    <div className="divider"></div>
                     {showSocial && (
                         <SocialsButton />
                     )}
@@ -45,4 +49,4 @@ const CardWrapper: React.FC<CardWrapperProps> = ({
     );
 };
 
-export default CardWrapper;
+export default AuthCard;
