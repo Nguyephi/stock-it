@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, { useState, useTransition } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { SigninSchema } from '@/schema';
+import { signin } from '@/actions/signin';
 
 const formFields = [
     {
@@ -25,6 +26,10 @@ const formFields = [
 ];
 
 export default function SignInForm() {
+    const [error, setError] = useState<string | undefined>("");
+    const [success, setSuccess] = useState<string | undefined>("");
+    const [isPending, startTransition] = useTransition();
+    
     const form = useForm<z.infer<typeof SigninSchema>>({
         resolver: zodResolver(SigninSchema),
         defaultValues: {
@@ -33,8 +38,18 @@ export default function SignInForm() {
         }
     })
 
-    const onSubmit = (data: z.infer<typeof SigninSchema>) => {
-        console.log(data);
+    const onSubmit = (values: z.infer<typeof SigninSchema>) => {
+        setError("");
+        setSuccess("");
+        startTransition(() => {
+            signin(values)
+            .then((data) => {
+                if (!data) return
+                const {error, success} = data
+                if (error) setError(data.error)
+                if (success) setSuccess(data.success)
+            })
+        })
     };
 
     return (
@@ -45,7 +60,14 @@ export default function SignInForm() {
                 backButtonHref="/auth/register"
                 showSocial
             >
-                <Form form={form} onSubmit={onSubmit} fields={formFields} />
+                <Form 
+                    form={form}
+                    onSubmit={onSubmit}
+                    fields={formFields}
+                    isPending={isPending} 
+                    error={error}
+                    success={success}
+                />
             </AuthCard>
         </div>
     )

@@ -12,9 +12,10 @@ interface FormFieldProps {
   label?: string;
   type: string;
   placeholder: string;
+  isPending?: boolean
 }
 
-const FormField: React.FC<FormFieldProps> = ({ control, name, label, type, placeholder }) => {
+const FormField: React.FC<FormFieldProps> = ({ control, name, label, type, isPending=false, placeholder }) => {
   return (
     <Controller
       name={name}
@@ -23,7 +24,7 @@ const FormField: React.FC<FormFieldProps> = ({ control, name, label, type, place
         <FormItem>
           <FormLabel htmlFor={name}>{label}</FormLabel>
           <FormControl>
-            <Input id={name} {...field} type={type} placeholder={placeholder} />
+            <Input disabled={isPending} id={name} {...field} type={type} placeholder={placeholder} />
             <FormMessage type="error">
                 {fieldState.error?.message}
             </FormMessage>
