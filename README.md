@@ -12,11 +12,12 @@ Stock it is an application that allows users to load SKU from Printify to Etsy s
 
 ## Features
 
-Set up an nextjs app with this boilerplate using this tech stack
+Set up an nextjs app with a boilerplate using this tech stack
 - NextJs
 - TypeScript
 - Redux (state management, hooks)
-- TailwindCSS/DaisyUI
+- TailwindCSS
+- DaisyUI; other options shadcn/ui or flowbite
 - NextAuth (version 5 beta)
 - Prisma
 - Supabase
