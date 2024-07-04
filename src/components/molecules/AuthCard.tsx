@@ -20,7 +20,7 @@ const AuthCard: React.FC<AuthCardProps> = ({
     headerLabel,
     backButtonLabel,
     backButtonHref,
-    showSocial = true,
+    showSocial = false,
 }) => {
     return (
         <Card>
@@ -32,8 +32,8 @@ const AuthCard: React.FC<AuthCardProps> = ({
                     </div>
                 )}
                 {children}
-                <div className="divider"></div>
                 <div className='space-y-2'>
+                    <div className="divider mt-0"></div>
                     {showSocial && (
                         <SocialsButton />
                     )}
