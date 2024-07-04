@@ -5,6 +5,10 @@ export const SigninSchema = z.object({
     password: z.string().min(1, 'Password is required')
 })
 
+export const ResetSchema = z.object({
+    email: z.string().min(1, 'Email is required').email('Invalid email address'),
+})
+
 export const RegisterSchema = z.object({
     username: z.string().min(1, 'Username is required'),
     email: z.string().min(1, 'Email is required').email('Invalid email address'),
