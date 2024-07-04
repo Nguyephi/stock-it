@@ -4,6 +4,7 @@ import React, { useState, useTransition } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSearchParams } from 'next/navigation';
 
 import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
@@ -26,6 +27,9 @@ const formFields = [
 ];
 
 export default function SignInForm() {
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ?
+    "Email in use with a different provider!" : "";
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
@@ -65,7 +69,7 @@ export default function SignInForm() {
                     onSubmit={onSubmit}
                     fields={formFields}
                     isPending={isPending} 
-                    error={error}
+                    error={error || urlError}
                     success={success}
                 />
             </AuthCard>
