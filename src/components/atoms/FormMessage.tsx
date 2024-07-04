@@ -13,7 +13,7 @@ const FormMessage: React.FC<FormMessageProps> = ({ children, type }) => {
     success: 'text-green-600',
   }[type];
 
-  return <p className={clsx("text-sm text-left px-1 pt-1", messageClass)}>{children}</p>;
+  return <p className={clsx("text-xs text-left px-1 pt-1", messageClass)}>{children}</p>;
 };
 
 export default FormMessage;

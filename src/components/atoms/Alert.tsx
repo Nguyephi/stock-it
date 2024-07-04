@@ -12,7 +12,7 @@ interface AlertProps {
 const Alert: React.FC<AlertProps> = ({ message, icon, iconPlacement, className }) => {
     if (!message) return null;
     return (
-        <div role="alert" className={clsx('alert rounded-md text-sm', className)}>
+        <div role="alert" className={clsx('alert rounded-md text-sm py-2', className)}>
             {iconPlacement === "before" && icon}
             <span>{message}</span>
             {iconPlacement === "after" && icon}

@@ -12,6 +12,7 @@ interface FormProps {
   isPending?: boolean;
   error?: string | undefined;
   success?: string | undefined;
+  buttonLabel?: string;
   fields: {
     id: string;
     label?: string;
@@ -20,10 +21,10 @@ interface FormProps {
   }[];
 }
 
-const Form: React.FC<FormProps> = ({ form, onSubmit, isPending = false, fields, success, error }) => {
+const Form: React.FC<FormProps> = ({ form, onSubmit, isPending = false, fields, success, error, buttonLabel = "Submit" }) => {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      <div className='mb-2'>
+      <div className='mb-2 space-y-1'>
         {fields.map(field => (
           <FormField
             isPending={isPending}
@@ -35,10 +36,10 @@ const Form: React.FC<FormProps> = ({ form, onSubmit, isPending = false, fields, 
             placeholder={field.placeholder}
           />
         ))}
+        <Alert icon={<FiAlertTriangle className="h-4 w-4" />} iconPlacement="before" message={error} className='text-red-950 alert-error mt-4' />
+        <Alert icon={<FaCheckCircle className="h-4 w-4" />} iconPlacement="before" message={success} className='text-green-950 alert-success mt-4' />
       </div>
-      <Alert icon={<FaCheckCircle className="h-4 w-4" />} iconPlacement="before" message={success} className='text-green-950 alert-success mt-4' />
-      <Alert icon={<FiAlertTriangle className="h-4 w-4" />} iconPlacement="before" message={error} className='text-red-950 alert-error mt-4' />
-      <Button disabled={isPending} type="submit" className="btn-primary mt-2 w-full">Submit</Button>
+      <Button disabled={isPending} type="submit" className="btn-primary mt-2 w-full">{buttonLabel}</Button>
     </form>
   );
 };
