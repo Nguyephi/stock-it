@@ -8,7 +8,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 const Socials: React.FC = () => {
     const onClick = (provider: "facebook") => {
         signIn(provider, {
-            callbaclUrl: DEFAULT_LOGIN_REDIRECT
+            callbackUrl: DEFAULT_LOGIN_REDIRECT
         })
     } 
     return (
