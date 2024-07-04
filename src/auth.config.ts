@@ -18,19 +18,14 @@ export default {
                     if (!user || !user.password) {
                         throw new Error("User not found!")
                     }
-                    
-                    
+
                     const passwordMatched = await bcrypt.compare(
                         password,
                         user.password
                     )
 
                     if (passwordMatched) {
-                        return {
-                            id: user.id.toString(),
-                            name: user.name,
-                            email: user.email
-                        }
+                        return user
                     }
                 }
                 throw new Error("Invalid credentials!")
