@@ -1,7 +1,7 @@
-import Dashboard from "@/components/pages/Dashboard"
+import DashboardPage from "@/components/pages/DashboardPage"
 
-export default async function Home() {
+export default function Home() {
   return (
-    <Dashboard />
+    <DashboardPage />
   );
 }
