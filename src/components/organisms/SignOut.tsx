@@ -1,4 +1,4 @@
-import { signOut } from "@/auth"
+import { signOut } from "next-auth/react";
 import Title from "../atoms/Title";
 import Button from "../atoms/Button";
 
@@ -7,9 +7,8 @@ export default function SignOut() {
     <div className="space-y-6 text-center">
       <Title>Sign out</Title>
       <form
-        action={async () => {
-          "use server"
-          await signOut({ redirectTo: "/" });
+        action={() => {
+          signOut();
         }}
       >
         <Button type="submit">bye-bye</Button>

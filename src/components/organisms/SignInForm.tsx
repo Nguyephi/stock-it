@@ -29,7 +29,7 @@ const formFields = [
 export default function SignInForm() {
     const searchParams = useSearchParams();
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ?
-    "Email in use with a different provider!" : "";
+        "Email in use with a different provider!" : "";
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
@@ -47,12 +47,12 @@ export default function SignInForm() {
         setSuccess("");
         startTransition(() => {
             signin(values)
-            .then((data) => {
-                if (!data) return
-                const {error, success} = data
-                if (error) setError(data.error)
-                if (success) setSuccess(data.success)
-            })
+                .then((data) => {
+                    if (!data) return
+                    const { error, success } = data
+                    if (error) setError(data.error)
+                    if (success) setSuccess(data.success)
+                })
         })
     };
 
@@ -64,11 +64,11 @@ export default function SignInForm() {
                 backButtonHref="/auth/register"
                 showSocial
             >
-                <Form 
+                <Form
                     form={form}
                     onSubmit={onSubmit}
                     fields={formFields}
-                    isPending={isPending} 
+                    isPending={isPending}
                     error={error || urlError}
                     success={success}
                 />
