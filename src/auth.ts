@@ -12,8 +12,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
   ...authConfig,
   pages: {
-    signIn: 'auth/signin  ',
-    error: 'auth/error',
+    signIn: '/auth/signin',
+    error: '/auth/error',
   },
   events: {
     async linkAccount({ user }) {
