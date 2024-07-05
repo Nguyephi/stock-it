@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 
 import "@/styles/globals.css";
 import { inter } from "@/lib/fonts"
-import { NextAuthProvider } from "./next-auth-provider";
-import { ReduxProvider } from "./redux-provider";
+import { NextAuthProvider } from "@/providers//next-auth-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,13 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <NextAuthProvider>
-        <ReduxProvider>
-          <body className={inter.className}>
-            {children}
-          </body>
-        </ReduxProvider>
-      </NextAuthProvider>
+      <body className={inter.className}>
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }
