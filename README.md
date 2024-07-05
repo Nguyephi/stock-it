@@ -25,7 +25,7 @@ This is a nextjs boilerplate that includes all the setup needed to quickly set u
     - Facebook oAuth
 
     Payments
-    - Stripe payments (coming soon)
+    - Stripe payments (coming soon...)
 
 ## Tech Stack
 
