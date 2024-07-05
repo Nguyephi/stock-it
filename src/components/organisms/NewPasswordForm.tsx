@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { NewPasswordSchema } from '@/schema';
-import { newPassword } from '@/actions/new-password';
+import { newPassword } from '@/actions/auth/new-password';
 
 const formFields = [
     {

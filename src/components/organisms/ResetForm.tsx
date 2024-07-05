@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { ResetSchema } from '@/schema';
-import { reset } from '@/actions/reset';
+import { reset } from '@/actions/auth/reset';
 
 const formFields = [
     {

@@ -6,7 +6,7 @@ import { BeatLoader } from 'react-spinners';
 import { FaCheckCircle } from 'react-icons/fa';
 import { FiAlertTriangle } from 'react-icons/fi';
 
-import { newVerification } from '@/actions/new-verification';
+import { newVerification } from '@/actions/auth/new-verification';
 import Alert from '../atoms/Alert';
 import AuthCard from '../molecules/AuthCard';
 

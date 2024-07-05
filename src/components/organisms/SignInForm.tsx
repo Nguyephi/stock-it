@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { SigninSchema } from '@/schema';
-import { signin } from '@/actions/signin';
+import { signin } from '@/actions/auth/signin';
 
 const formFields = [
     {
