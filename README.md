@@ -15,13 +15,14 @@ Stock it is an application that allows users to load SKU from Printify to Etsy s
 Set up an nextjs app with a boilerplate using this tech stack
 - NextJs
 - TypeScript
-- Redux (state management, hooks)
+- Zustand; or Jotai (state management, hooks)
 - TailwindCSS
-- DaisyUI; other options shadcn/ui or flowbite
-- NextAuth (version 5 beta)
+- DaisyUI; other options - shadcn/ui or flowbite
+- Auth (NextAuth v5 - beta)
 - Prisma
 - Supabase
 - PostgreSQL
+- Resend
 - Stripe
 
 ## Installation
@@ -50,28 +51,46 @@ Set up an nextjs app with a boilerplate using this tech stack
     DATABASE_URL="postgresql://your_name:your_password@localhost:5432/your_db_name"
     ```
 
-- **Supabase/PostgreSQL:**
+- **Supabase/ PostgreSQL:**
 
     Set up a supabase postgres db
     [Supabase](https://supabase.com/)
-
-    ```sh
     - Create a new project > click connect > click ORMs to get prisma credentials
     - To reset pw go to project settings > under configuration click database > you can reset pw here
-    ```
-
-- **Next Auth:**
-
-    Next Auth needs two env variables
 
     ```sh
-    AUTH_SECRET=your_secret
+    DATABASE_URL="postgresql://..."
+    DIRECT_URL="postgresql://..."
     ```
 
-    You can quickly create a good (NEXTAUTH_SECRET) value on the command line via this openssl command.
+- **Auth (Next Auth v5 - beta):**
+
+    Add the following env variables to your .env file for NextAuth
+
+    ```sh
+    AUTH_SECRET="your_secret"
+    NEXTAUTH_URL="http://localhost:3000"
+    ```
+
+    You can quickly create a good (AUTH_SECRET) value on the command line via this openssl command.
     [Next Auth configuration options guide](https://next-auth.js.org/configuration/options)
     ```sh
     openssl rand -base64 32
+    ```
+
+    Depending on the provider you want to use, you will need to add the following to your .env file. For example, if you want to use Google OAuth, you would add the following:
+    ```sh
+    AUTH_GOOGLE_ID="your_client_id"
+    AUTH_GOOGLE_SECRET="your_client_secret"
+    ```
+
+- **Resend:**
+
+    After signing up for Resend, you will need to add the following to your .env file.
+
+    ```sh
+    RESEND_API_KEY="your_api_key"
+    RESEND_FROM="onboarding@resend.dev"
     ```
 
 ## Running the Application
