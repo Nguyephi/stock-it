@@ -100,7 +100,13 @@ Set up an nextjs app with a boilerplate using this tech stack
     ```sh
     npm run dev
     ```
+## Deploying to Vercel
 
+- **Deploy on vercel or use the cli:**
+
+    Personally I deploy on [Vercel](https://vercel.com/). Simply sign up/in, create new project, connect your github repo, add env variables and deploy.
+    Note: When you set the NEXTAUTH_URL env variable it can be set to http://localhost:3000. You will get a url after deploying, just remember to change your NEXTAUTH_URL to the url you get after deploying.
+  
 ## Developer Notes
 
 - **Read formatted md:**
