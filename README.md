@@ -1,10 +1,11 @@
-# Stock It
+# App Boilerplate
 
-Stock it is an application that allows users to load SKU from Printify to Etsy seamlessly.
+This is a nextjs boilerplate that includes all the setup needed to quickly set up an app.
 
 ## Table of Contents
 
 - [Features](#features)
+- [Tech Stack](#tech-stack)
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [Running the Application](#running-the-application)
@@ -12,7 +13,22 @@ Stock it is an application that allows users to load SKU from Printify to Etsy s
 
 ## Features
 
-Set up an nextjs app with a boilerplate using this tech stack
+- **Current app features:**
+   
+    Auth
+    - Login with email
+    - Sign up with email
+    - Forgot password
+    - Reset password
+    - Verify email
+    - Resend email
+    - Facebook oAuth
+
+    Payments
+    - Stripe payments (coming soon)
+
+## Tech Stack
+
 - NextJs
 - TypeScript
 - Zustand; or Jotai (state management, hooks)
@@ -113,7 +129,7 @@ Set up an nextjs app with a boilerplate using this tech stack
   
 ## Developer Notes
 
-- **Read formatted md:**
+- **README.md formatted view:**
 
     ```sh
     Cmd + Shift + V
