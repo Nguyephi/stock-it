@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const Input: React.FC<InputProps> = (props) => {
-  return <input {...props} className="input input-bordered w-full" />;
-};
+const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  return <input ref={ref} {...props} className="input input-bordered w-full" />;
+});
+
+Input.displayName = 'Input';
 
 export default Input;
