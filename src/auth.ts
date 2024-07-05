@@ -51,15 +51,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session;
     },
-    async jwt({ token, user }) {
-      if (user && user.id) {
-        const existingUser = await getUserById(user.id);
-
-        if (!existingUser) {
-          return token
+    async jwt({ token, user, trigger }) {
+      if (trigger === "signIn") {
+        if (user && user.id) {
+          const existingUser = await getUserById(user.id);
+  
+          if (!existingUser) {
+            return token
+          }
+          token.role = existingUser.role
         }
-        token.role = existingUser.role
-      }
+      };
       return token;
     },
   },
