@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { SessionProvider } from "next-auth/react"
-import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import "@/styles/globals.css";
+import { inter } from "@/lib/fonts"
+import { NextAuthProvider } from "./next-auth-provider";
+import { ReduxProvider } from "./redux-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,11 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <SessionProvider>
-          {children}
-        </SessionProvider>
-      </body>
+      <NextAuthProvider>
+        <ReduxProvider>
+          <body className={inter.className}>
+            {children}
+          </body>
+        </ReduxProvider>
+      </NextAuthProvider>
     </html>
   );
 }
