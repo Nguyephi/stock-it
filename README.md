@@ -78,7 +78,7 @@ Set up an nextjs app with a boilerplate using this tech stack
     openssl rand -base64 32
     ```
 
-    Depending on the provider you want to use, you will need to add the following to your .env file. For example, if you want to use Google OAuth, you would add the following:
+    Depending on the oAuth provider you want to use, you will need to add the following to your .env file. For example, if you want to use Google OAuth, you would add the following:
     ```sh
     AUTH_GOOGLE_ID="your_client_id"
     AUTH_GOOGLE_SECRET="your_client_secret"
@@ -102,10 +102,14 @@ Set up an nextjs app with a boilerplate using this tech stack
     ```
 ## Deploying to Vercel
 
-- **Deploy on vercel or use the cli:**
+- **Deploy on vercel (or use the cli):**
 
-    Personally I deploy on [Vercel](https://vercel.com/). Simply sign up/in, create new project, connect your github repo, add env variables and deploy.
-    Note: When you set the NEXTAUTH_URL env variable it can be set to http://localhost:3000. You will get a url after deploying, just remember to change your NEXTAUTH_URL to the url you get after deploying.
+    Personally I deploy on [Vercel](https://vercel.com/). Simply sign in, create new project, connect your github repo, add env variables and deploy.
+    - Note: When you set the NEXTAUTH_URL env variable it can be set to http://localhost:3000 in order to deploy, however you will need to get the apps url after deploying. Change your NEXTAUTH_URL in vercel env variablesto the url you get after deploying.
+
+- **Deploying with oAuth:**
+
+    If you are deploying with an oAuth provider, you will need to change its callback url to your vercel url. To find the callback url append /api/auth/providers to you app url. This will give you all the callback urls for the different providers you have set up.
   
 ## Developer Notes
 
