@@ -10,21 +10,7 @@ import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { SigninSchema } from '@/schema';
 import { signin } from '@/actions/auth/signin';
-
-const formFields = [
-    {
-        id: 'email',
-        // label: 'Email',
-        type: 'email',
-        placeholder: 'Email',
-    },
-    {
-        id: 'password',
-        // label: 'Password',
-        type: 'password',
-        placeholder: 'Password',
-    },
-];
+import { SigninFormFields } from '@/lib/form-fields';
 
 export default function SignInForm() {
     const searchParams = useSearchParams();
@@ -67,7 +53,7 @@ export default function SignInForm() {
                 <Form
                     form={form}
                     onSubmit={onSubmit}
-                    fields={formFields}
+                    fields={SigninFormFields}
                     isPending={isPending}
                     error={error || urlError}
                     success={success}

@@ -9,15 +9,7 @@ import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { ResetSchema } from '@/schema';
 import { reset } from '@/actions/auth/reset';
-
-const formFields = [
-    {
-        id: 'email',
-        // label: 'Email',
-        type: 'email',
-        placeholder: 'Email',
-    },
-];
+import { ResetFormFields } from '@/lib/form-fields';
 
 export default function ResetForm() {
     const [error, setError] = useState<string | undefined>("");
@@ -55,7 +47,7 @@ export default function ResetForm() {
                 <Form 
                     form={form}
                     onSubmit={onSubmit}
-                    fields={formFields}
+                    fields={ResetFormFields}
                     isPending={isPending} 
                     error={error}
                     success={success}

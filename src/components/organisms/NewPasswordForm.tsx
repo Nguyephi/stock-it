@@ -10,21 +10,7 @@ import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { NewPasswordSchema } from '@/schema';
 import { newPassword } from '@/actions/auth/new-password';
-
-const formFields = [
-    {
-        id: 'password',
-        // label: 'Password',
-        type: 'password',
-        placeholder: 'Password',
-    },
-    {
-        id: 'confirmPassword',
-        // label: 'Confirm Password',
-        type: 'password',
-        placeholder: 'Confirm Password',
-    },
-];
+import { NewPasswordFormFields } from '@/lib/form-fields';
 
 export default function NewPasswordForm() {
     const searchParams = useSearchParams();
@@ -65,7 +51,7 @@ export default function NewPasswordForm() {
                 <Form 
                     form={form}
                     onSubmit={onSubmit}
-                    fields={formFields}
+                    fields={NewPasswordFormFields}
                     isPending={isPending} 
                     error={error}
                     success={success}

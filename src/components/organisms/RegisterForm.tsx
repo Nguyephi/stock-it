@@ -9,33 +9,7 @@ import AuthCard from '../molecules/AuthCard';
 import Form from '../molecules/Form';
 import { RegisterSchema } from '@/schema';
 import { register } from '@/actions/auth/register';
-
-const formFields = [
-    {
-        id: 'username',
-        // label: 'Username',
-        type: 'text',
-        placeholder: 'Username',
-    },
-    {
-        id: 'email',
-        // label: 'Email',
-        type: 'email',
-        placeholder: 'Email',
-    },
-    {
-        id: 'password',
-        // label: 'Password',
-        type: 'password',
-        placeholder: 'Password',
-    },
-    {
-        id: 'confirmPassword',
-        // label: 'Confirm Password',
-        type: 'password',
-        placeholder: 'Confirm Password',
-    },
-];
+import { RegisterFormFields } from '@/lib/form-fields';
 
 export default function RegisterForm() {
     const [error, setError] = useState<string | undefined>("");
@@ -75,7 +49,7 @@ export default function RegisterForm() {
                 <Form
                     form={form}
                     onSubmit={onSubmit}
-                    fields={formFields}
+                    fields={RegisterFormFields}
                     isPending={isPending}
                     error={error}
                     success={success}
