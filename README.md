@@ -33,7 +33,7 @@ Stock it is an application that allows users to load product variant's SKU from 
 - TypeScript
 - Zustand; or Jotai (state management, hooks)
 - TailwindCSS
-- DaisyUI; other options - shadcn/ui or flowbite
+- Shadcn/ui (a collection of re-usable components); or Daisyui (more flexibility)
 - Auth (NextAuth v5 - beta)
 - Prisma
 - Supabase
