@@ -3,6 +3,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from "next/link"
+import { Button } from './button';
 
 interface LinkButtonProps {
   label: string;
@@ -12,12 +13,14 @@ interface LinkButtonProps {
 
 const LinkButton: React.FC<LinkButtonProps> = ({ label, href, className = '' }) => {
   return (
-    <Link href={href} className={clsx(
-        'link link-hover', 
-        className
-        )}>
-      {label}
-    </Link>
+    <Button asChild variant="link" className={clsx(
+      'link',
+      className
+    )}>
+      <Link href={href}>
+        {label}
+      </Link>
+    </Button>
   );
 };
 

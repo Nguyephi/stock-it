@@ -1,5 +1,5 @@
 import React from 'react'
-import Card from '../atoms/Card'
+import Card from '../atoms/card'
 import CardBody from '../atoms/CardBody'
 import Title from '../atoms/Title'
 import CardActions from '../atoms/CardActions'

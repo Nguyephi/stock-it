@@ -1,6 +1,6 @@
 import { signOut } from "next-auth/react";
 import Title from "../atoms/Title";
-import Button from "../atoms/Button";
+import { Button } from "../atoms/button";
 
 export default function SignOut() {
   return (

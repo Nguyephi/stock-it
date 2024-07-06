@@ -1,11 +1,8 @@
 import React from 'react';
-import CardHeader from '../atoms/CardHeader';
-import Card from '../atoms/Card';
-import CardBody from '../atoms/CardBody';
-import CardActions from '../atoms/CardActions';
+import { Card, CardContent, CardDescription, CardFooter, CardTitle, CardHeader } from '../atoms/card';
 import SocialsButton from '../atoms/SocialsButton';
 import LinkButton from '../atoms/LinkButton';
-import Title from '../atoms/Title';
+import Divider from '../atoms/Divider';
 
 interface AuthCardProps {
     children: React.ReactNode;
@@ -23,29 +20,25 @@ const AuthCard: React.FC<AuthCardProps> = ({
     showSocial = false,
 }) => {
     return (
-        <Card>
-            <CardBody>
-                {headerLabel && (
-                    <div className='space-y-2'>
-                        <Title>🔐</Title>
-                        <CardHeader>{headerLabel}</CardHeader>
-                    </div>
-                )}
+        <Card className="flex flex-col space-y-3 py-4 w-[400px]">
+            <CardHeader className="flex flex-col space-y-2 items-center">
+                <CardTitle className="text-6xl">🔐</CardTitle>
+                {headerLabel && <CardDescription className="text-2xl">{headerLabel}</CardDescription>}
+            </CardHeader>
+            <CardContent className='pb-0'>
                 {children}
-                <div className='space-y-2'>
-                    <div className="divider mt-0"></div>
-                    {showSocial && (
-                        <SocialsButton />
-                    )}
-                    <CardActions className="justify-center">
-                        <LinkButton
-                            label={backButtonLabel}
-                            href={backButtonHref}
-                        />
-                    </CardActions>
-                </div>
-            </CardBody>
-        </Card>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-2">
+                <Divider orientation="horizontal" />
+                {showSocial && (
+                    <SocialsButton />
+                )}
+                <LinkButton
+                    label={backButtonLabel}
+                    href={backButtonHref}
+                />
+            </CardFooter>
+        </Card >
     );
 };
 

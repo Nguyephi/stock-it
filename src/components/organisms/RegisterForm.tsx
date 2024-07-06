@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import AuthCard from '../molecules/AuthCard';
-import Form from '../molecules/Form';
 import { RegisterSchema } from '@/schema';
 import { register } from '@/actions/auth/register';
 import { RegisterFormFields } from '@/lib/form-fields';
+import AuthForm from '../molecules/AuthForm';
 
 export default function RegisterForm() {
     const [error, setError] = useState<string | undefined>("");
@@ -46,13 +46,14 @@ export default function RegisterForm() {
                 backButtonHref="/auth/signin"
                 showSocial
             >
-                <Form
+                <AuthForm
                     form={form}
                     onSubmit={onSubmit}
                     fields={RegisterFormFields}
                     isPending={isPending}
                     error={error}
                     success={success}
+                    buttonLabel='Register account'
                 />
             </AuthCard>
         </div>

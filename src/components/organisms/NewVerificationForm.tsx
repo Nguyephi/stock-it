@@ -7,7 +7,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { FiAlertTriangle } from 'react-icons/fi';
 
 import { newVerification } from '@/actions/auth/new-verification';
-import Alert from '../atoms/Alert';
+import { Alert, AlertDescription } from '../atoms/alert';
 import AuthCard from '../molecules/AuthCard';
 
 export default function NewVerificationForm() {
@@ -47,8 +47,18 @@ export default function NewVerificationForm() {
                         <BeatLoader />
                     </div>
                 )}
-                <Alert icon={<FaCheckCircle className="h-4 w-4" />} iconPlacement="before" message={success} className='text-green-950 alert-success mt-4' />
-                <Alert icon={<FiAlertTriangle className="h-4 w-4" />} iconPlacement="before" message={error} className='text-red-950 alert-error mt-4' />
+                {error && <Alert variant="destructive">
+                    <div className='flex items-center space-x-2'>
+                        <FiAlertTriangle className="h-4 w-4" />
+                        <AlertDescription>{error}</AlertDescription>
+                    </div>
+                </Alert>}
+                {success && <Alert variant="affirmative">
+                    <div className='flex items-center space-x-2'>
+                        <FaCheckCircle className="h-4 w-4" />
+                        <AlertDescription>{success}</AlertDescription>
+                    </div>
+                </Alert>}
             </AuthCard>
         </div>
     )

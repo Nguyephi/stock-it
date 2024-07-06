@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useSearchParams } from 'next/navigation';
 
 import AuthCard from '../molecules/AuthCard';
-import Form from '../molecules/Form';
+import AuthForm from '../molecules/AuthForm';
 import { SigninSchema } from '@/schema';
 import { signin } from '@/actions/auth/signin';
 import { SigninFormFields } from '@/lib/form-fields';
@@ -50,13 +50,14 @@ export default function SignInForm() {
                 backButtonHref="/auth/register"
                 showSocial
             >
-                <Form
+                <AuthForm
                     form={form}
                     onSubmit={onSubmit}
                     fields={SigninFormFields}
                     isPending={isPending}
                     error={error || urlError}
                     success={success}
+                    buttonLabel='Sign in'
                 />
             </AuthCard>
         </div>

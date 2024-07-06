@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import AuthCard from '../molecules/AuthCard';
-import Form from '../molecules/Form';
 import { ResetSchema } from '@/schema';
 import { reset } from '@/actions/auth/reset';
 import { ResetFormFields } from '@/lib/form-fields';
+import AuthForm from '../molecules/AuthForm';
 
 export default function ResetForm() {
     const [error, setError] = useState<string | undefined>("");
@@ -44,7 +44,7 @@ export default function ResetForm() {
                 backButtonLabel="Back to login"
                 backButtonHref="/auth/signin"
             >
-                <Form 
+                <AuthForm
                     form={form}
                     onSubmit={onSubmit}
                     fields={ResetFormFields}

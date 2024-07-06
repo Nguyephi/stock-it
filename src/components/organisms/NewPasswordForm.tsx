@@ -7,10 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
 
 import AuthCard from '../molecules/AuthCard';
-import Form from '../molecules/Form';
 import { NewPasswordSchema } from '@/schema';
 import { newPassword } from '@/actions/auth/new-password';
 import { NewPasswordFormFields } from '@/lib/form-fields';
+import AuthForm from '../molecules/AuthForm';
 
 export default function NewPasswordForm() {
     const searchParams = useSearchParams();
@@ -48,7 +48,7 @@ export default function NewPasswordForm() {
                 backButtonLabel="Back to login"
                 backButtonHref="/auth/signin"
             >
-                <Form 
+                <AuthForm 
                     form={form}
                     onSubmit={onSubmit}
                     fields={NewPasswordFormFields}

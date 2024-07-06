@@ -1,7 +1,7 @@
 "use client"
 
 import { FaGoogle, FaFacebook } from "react-icons/fa"
-import Button from "./Button";
+import {Button} from "./button";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
@@ -12,7 +12,7 @@ const Socials: React.FC = () => {
         })
     } 
     return (
-        <div className="flex justify-center items-center space-x-2">
+        <div className="flex justify-center items-center space-x-2 w-full">
             <Button
                 className="min-w-[50%] text-sm btn-outline"
                 onClick={() => {}}
