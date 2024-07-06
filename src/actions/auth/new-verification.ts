@@ -13,7 +13,6 @@ export const newVerification = async (
         return { error: "Token does not exist!" }
     }
 
-    console.log("newVerification action", existingToken);
     const hasExpired = new Date(existingToken.expires) < new Date();
 
     if (hasExpired) {
