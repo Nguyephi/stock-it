@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import clsx from 'clsx';
+import { cn } from '@/lib/cn';
 import Link from "next/link"
 import { Button } from './button';
 
@@ -13,7 +13,7 @@ interface LinkButtonProps {
 
 const LinkButton: React.FC<LinkButtonProps> = ({ label, href, className = '' }) => {
   return (
-    <Button asChild variant="link" className={clsx(
+    <Button asChild variant="link" className={cn(
       'link',
       className
     )}>

@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import clsx from 'clsx';
+import { cn } from '@/lib/cn';
 import { poppinsFont } from '@/lib/fonts';
 
 interface TitleProps {
@@ -11,7 +11,7 @@ interface TitleProps {
 
 const Title: React.FC<TitleProps> = ({ children, className = '' }) => {
   return (
-    <h1 className={clsx(
+    <h1 className={cn(
         'text-6xl font-semibold text-white drop-shadow-md', 
         poppinsFont.className, 
         className
