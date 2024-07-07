@@ -1,5 +1,12 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardTitle, CardHeader } from '../atoms/card';
+import { 
+    Card, 
+    CardContent, 
+    CardDescription, 
+    CardFooter, 
+    CardTitle, 
+    CardHeader 
+} from '../atoms/card';
 import SocialsButton from '../atoms/SocialsButton';
 import LinkButton from '../atoms/LinkButton';
 import Divider from '../atoms/Divider';
