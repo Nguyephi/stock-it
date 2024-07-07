@@ -14,7 +14,7 @@ export function LandingPageHero() {
   return (
     <div className="space-y-6 text-center">
       <Title>Welcome to the landing page!!</Title>
-      <Button type="button" onClick={handleSignin} variant="default" size="lg">Sign in here</Button>
+      <Button type="button" onClick={handleSignin} variant="ghost" size="lg" className="text-lg">Sign in</Button>
     </div>
   )
 }
