@@ -1,10 +1,11 @@
 import React from 'react';
 import { LandingPageHero } from '../organisms/LandingPageHero';
+import MainLayout from '../templates/MainLayout';
 
 const LandingPage = () => (
-    <main className="flex h-full flex-col items-center justify-center bg-sky-400">
+    <MainLayout>
         <LandingPageHero />
-    </main>
+    </MainLayout>
 );
 
 export default LandingPage;
