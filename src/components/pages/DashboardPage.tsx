@@ -11,7 +11,6 @@ const DashboardPage = () => {
     return (
         <DashboardLayout>
             <Title>Welcome to the Dashboard</Title>
-            <SignOut />
             {user && JSON.stringify(user)}
         </DashboardLayout>  
     )

@@ -9,7 +9,7 @@ export default function SignOut() {
           signOut();
         }}
       >
-        <Button variant="ghost" type="submit">bye-bye</Button>
+        <Button variant="ghost" type="submit" size="sm" className="text-md">Sign out</Button>
       </form>
     </div>
   )
