@@ -29,7 +29,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <Button type="button" onClick={handleSignin} variant="ghost" size="sm" className="text-md">Sign in</Button>
             </div>
             } />
-        <div className="container flex-grow pt-16 w-full">
+        <div className="container flex-grow pt-16 pb-16 w-full">
             <main className="flex flex-col justify-center items-center">
                 {children}
             </main>
