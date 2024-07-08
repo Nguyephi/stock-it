@@ -1,6 +1,6 @@
-# App Boilerplate
+# Stock It
 
-This is a nextjs boilerplate that includes all the setup needed to quickly set up an app.
+Stock it is an application that allows users to load product variant's SKU from Printify to Etsy seamlessly.
 
 ## Table of Contents
 
