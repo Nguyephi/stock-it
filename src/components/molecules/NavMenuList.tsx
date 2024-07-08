@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from '../atoms/navigation-menu';
-import { TfiAngleRight, TfiAngleLeft, TfiUser, TfiSettings, TfiHome } from 'react-icons/tfi';
+import { TfiAngleRight, TfiAngleLeft, TfiSettings, TfiHome } from 'react-icons/tfi';
 import { useDrawerStore } from '@/store/nav-drawer';
 
 const NavMenuList: React.FC = () => {
@@ -11,7 +11,6 @@ const NavMenuList: React.FC = () => {
 
     const menuItems = [
         { icon: TfiHome, name: 'Home', route: '/dashboard' },
-        { icon: TfiUser, name: 'Profile', route: '/dashboard/profile' },
         { icon: TfiSettings, name: 'Settings', route: '/dashboard/settings' },
     ];
 
