@@ -13,8 +13,8 @@ const ErrorPage = () => {
     return (
         <main>
             <Card className="w-[450px]">
-                <CardHeader className="flex flex-col space-y-2 items-cente">
-                    <CardTitle>💩</CardTitle>
+                <CardHeader className="flex flex-col space-y-2 items-center">
+                    <CardTitle className="text-6xl">💩</CardTitle>
                     <CardDescription className="text-red-700 text-2xl">Oops! Something went wrong</CardDescription>
                 </CardHeader>
                 <CardFooter className="flex flex-col space-y-2">
