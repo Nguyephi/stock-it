@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Drawer, DrawerContent, DrawerHeader, DrawerFooter,  DrawerTitle } from '../atoms/drawer';
+import { Drawer, DrawerContent, DrawerHeader, DrawerFooter,  DrawerTitle } from '../atoms/RightSideDrawer';
 import NavMenuList from '../molecules/NavMenuList';
 import { useDrawerStore } from '@/store/nav-drawer';
 
@@ -18,9 +18,6 @@ const SideDrawer: React.FC<SideDrawerProps> = () => {
                     <DrawerTitle />
                     <NavMenuList />
                 </DrawerHeader>
-                <DrawerFooter>
-                    <p className='px-2'>Footer Content</p>
-                </DrawerFooter>
             </DrawerContent>
         </Drawer>
     );
