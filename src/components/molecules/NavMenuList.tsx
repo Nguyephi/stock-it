@@ -3,6 +3,8 @@ import { useRouter } from 'next/navigation';
 
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from '../atoms/navigation-menu';
 import { TfiAngleRight, TfiAngleLeft, TfiSettings, TfiHome } from 'react-icons/tfi';
+import { FaEtsy } from "react-icons/fa6";
+import { PiHandPeace } from "react-icons/pi";
 import { useDrawerStore } from '@/store/nav-drawer';
 
 const NavMenuList: React.FC = () => {
@@ -11,6 +13,8 @@ const NavMenuList: React.FC = () => {
 
     const menuItems = [
         { icon: TfiHome, name: 'Home', route: '/dashboard' },
+        { icon: PiHandPeace, name: 'Printify', route: '/dashboard/printify' },
+        { icon: FaEtsy, name: 'Etsy', route: '/dashboard/etsy' },
         { icon: TfiSettings, name: 'Settings', route: '/dashboard/settings' },
     ];
 
@@ -30,7 +34,7 @@ const NavMenuList: React.FC = () => {
                     <NavigationMenuLink asChild className="">
                         <div className="flex items-center w-full">
                             <TfiAngleRight />
-                            <span className="text-gray-600 ml-2 flex-1">Close</span>
+                            <span className="text-gray-600 ml-4 flex-1">Close</span>
                         </div>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -53,7 +57,7 @@ const NavMenuList: React.FC = () => {
                     <NavigationMenuLink asChild>
                         <div className="flex items-center">
                             <item.icon />
-                            {isOpen && <span className="text-gray-600 ml-2">{item.name}</span>}
+                            {isOpen && <span className="text-gray-600 ml-4">{item.name}</span>}
                         </div>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
