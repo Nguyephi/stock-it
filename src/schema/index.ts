@@ -1,5 +1,9 @@
 import * as z from 'zod';
 
+export const InputSchema = z.object({
+  input: z.string().min(1, 'Input required to submit'),
+})
+
 export const SigninSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email address'),
   password: z.string().min(1, 'Password is required')

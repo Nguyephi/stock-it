@@ -16,7 +16,7 @@ interface InputWithButtonProps {
   inputType?: string;
   inputPlaceholder: string;
   buttonText: string;
-  onSubmit: (value: z.infer<typeof InputSchema>) => Promise<{ error?: string; success?: string } | void>;
+  onSubmit?: (value: z.infer<typeof InputSchema>) => Promise<{ error?: string; success?: string } | void>;
   inputClassName?: string;
   buttonClassName?: string;
 }
@@ -44,7 +44,7 @@ export function InputWithButton({
     setError("");
     setSuccess("");
     startTransition(() => {
-      onSubmit(values)
+      onSubmit && onSubmit(values)
       .then((data) => {
         if (!data) return
         const { error, success } = data
