@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { BeatLoader } from 'react-spinners';
 import { FaCheckCircle } from 'react-icons/fa';
@@ -9,12 +9,12 @@ import { FiAlertTriangle } from 'react-icons/fi';
 import { newVerification } from '@/actions/auth/new-verification';
 import { Alert, AlertDescription } from '../atoms/alert';
 import AuthCard from '../molecules/AuthCard';
+import useAlertStore from '@/store/alert-message';
 
 export default function NewVerificationForm() {
     const searchParams = useSearchParams();
     const token = searchParams.get("token")
-    const [error, setError] = useState<string | undefined>("");
-    const [success, setSuccess] = useState<string | undefined>("");
+    const { error, success, clearMessages, setError, setSuccess } = useAlertStore();
 
     const onSubmit = useCallback(() => {
         if (!token) {
@@ -32,8 +32,15 @@ export default function NewVerificationForm() {
     }, [token])
 
     useEffect(() => {
+        clearMessages();
         onSubmit();
     }, [onSubmit]);
+
+    useEffect(() => {
+        return () => {
+          clearMessages();
+        };
+      }, [clearMessages]);
 
     return (
         <div>

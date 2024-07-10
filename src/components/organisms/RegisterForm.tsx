@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useTransition } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,10 +10,10 @@ import { RegisterSchema } from '@/schema';
 import { register } from '@/actions/auth/register';
 import { RegisterFormFields } from '@/lib/form-fields';
 import AuthForm from '../molecules/AuthForm';
+import useAlertStore from '@/store/alert-message';
 
 export default function RegisterForm() {
-    const [error, setError] = useState<string | undefined>("");
-    const [success, setSuccess] = useState<string | undefined>("");
+    const { error, success, clearMessages, setError, setSuccess } = useAlertStore();
     const [isPending, startTransition] = useTransition();
 
     const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -27,8 +27,7 @@ export default function RegisterForm() {
     })
 
     const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-        setError("");
-        setSuccess("");
+        clearMessages();
         startTransition(() => {
             register(values)
                 .then((data) => {
@@ -37,6 +36,12 @@ export default function RegisterForm() {
                 })
         })
     };
+
+    useEffect(() => {
+        return () => {
+            clearMessages();
+        };
+    }, [clearMessages]);
 
     return (
         <div>

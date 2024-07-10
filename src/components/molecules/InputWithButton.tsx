@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ import { Button } from "../atoms/button";
 import { Input } from "../atoms/input";
 import { cn } from "@/lib/cn";
 import { InputSchema } from "@/schema";
+import useAlertStore from "@/store/alert-message";
 
 interface InputWithButtonProps {
   inputType?: string;
@@ -29,8 +30,7 @@ export function InputWithButton({
   inputClassName,
   buttonClassName,
 }: InputWithButtonProps) {
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  const { error, success, clearMessages, setError, setSuccess } = useAlertStore();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof InputSchema>>({
@@ -41,18 +41,23 @@ export function InputWithButton({
   })
 
   const handleSubmit = (values: z.infer<typeof InputSchema>) => {
-    setError("");
-    setSuccess("");
+    clearMessages();
     startTransition(() => {
       onSubmit && onSubmit(values)
-      .then((data) => {
-        if (!data) return
-        const { error, success } = data
-        if (error) setError(data.error)
-        if (success) setSuccess(data.success)
-      })
+        .then((data) => {
+          if (!data) return
+          const { error, success } = data
+          if (error) setError(data.error)
+          if (success) setSuccess(data.success)
+        })
     })
   };
+
+  useEffect(() => {
+    return () => {
+      clearMessages();
+    };
+  }, [clearMessages]);
 
   return (
     <Form {...form}>

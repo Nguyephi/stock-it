@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useTransition } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,12 +10,12 @@ import { ResetSchema } from '@/schema';
 import { reset } from '@/actions/auth/reset';
 import { ResetFormFields } from '@/lib/form-fields';
 import AuthForm from '../molecules/AuthForm';
+import useAlertStore from '@/store/alert-message';
 
 export default function ResetForm() {
-    const [error, setError] = useState<string | undefined>("");
-    const [success, setSuccess] = useState<string | undefined>("");
+    const { error, success, clearMessages, setError, setSuccess } = useAlertStore();
     const [isPending, startTransition] = useTransition();
-    
+
     const form = useForm<z.infer<typeof ResetSchema>>({
         resolver: zodResolver(ResetSchema),
         defaultValues: {
@@ -24,18 +24,23 @@ export default function ResetForm() {
     })
 
     const onSubmit = (values: z.infer<typeof ResetSchema>) => {
-        setError("");
-        setSuccess("");
+        clearMessages();
         startTransition(() => {
             reset(values)
-            .then((data) => {
-                if (!data) return
-                const {error, success} = data
-                if (error) setError(data.error)
-                if (success) setSuccess(data.success)
-            })
+                .then((data) => {
+                    if (!data) return
+                    const { error, success } = data
+                    if (error) setError(data.error)
+                    if (success) setSuccess(data.success)
+                })
         })
     };
+
+    useEffect(() => {
+        return () => {
+            clearMessages();
+        };
+    }, [clearMessages]);
 
     return (
         <div>
@@ -48,7 +53,7 @@ export default function ResetForm() {
                     form={form}
                     onSubmit={onSubmit}
                     fields={ResetFormFields}
-                    isPending={isPending} 
+                    isPending={isPending}
                     error={error}
                     success={success}
                     buttonLabel='Reset password'

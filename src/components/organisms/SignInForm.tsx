@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useTransition } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,13 +11,13 @@ import AuthForm from '../molecules/AuthForm';
 import { SigninSchema } from '@/schema';
 import { signin } from '@/actions/auth/signin';
 import { SigninFormFields } from '@/lib/form-fields';
+import useAlertStore from '@/store/alert-message';
 
 export default function SignInForm() {
     const searchParams = useSearchParams();
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ?
         "Email in use with a different provider!" : "";
-    const [error, setError] = useState<string | undefined>("");
-    const [success, setSuccess] = useState<string | undefined>("");
+        const { error, success, clearMessages, setError, setSuccess } = useAlertStore();
     const [isPending, startTransition] = useTransition();
     
     const form = useForm<z.infer<typeof SigninSchema>>({
@@ -29,8 +29,7 @@ export default function SignInForm() {
     })
 
     const onSubmit = (values: z.infer<typeof SigninSchema>) => {
-        setError("");
-        setSuccess("");
+        clearMessages();
         startTransition(() => {
             signin(values)
                 .then((data) => {
@@ -41,6 +40,12 @@ export default function SignInForm() {
                 })
         })
     };
+
+    useEffect(() => {
+        return () => {
+          clearMessages();
+        };
+      }, [clearMessages]);
 
     return (
         <div>
