@@ -41,41 +41,73 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
         };
     }, [printify, success]);
 
-    return (
-        <div className='w-full'>
-            {provider === 'printify' && !printify?.id && !printifyLoading && (
-                <Card className="flex flex-col space-y-0 py-2 justify-between">
-                    <div className="flex flex-col">
-                        <CardHeader className="flex flex-col space-y-2">
-                            <CardTitle className="text-2xl">{headerLabel}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {description}
-                        </CardContent>
-                    </div>
-                    <CardFooter className='w-full'>
-                        <InputWithButton
-                            inputPlaceholder="Enter your access token"
-                            onSubmit={handleSubmit}
-                            buttonText="Connect"
-                        />
-                    </CardFooter>
-                </Card>
-            )}
-            {provider === 'printify' && printify?.id && (
-                <Card className="flex flex-col space-y-0 py-2 justify-between">
+    const renderPrintifyCard = () => {
+        if (!printifyLoading) {
+            if (!printify?.id) {
+                return (
+                    <Card className="flex flex-col space-y-0 py-2 justify-between">
+                        <div className="flex flex-col">
+                            <CardHeader className="flex flex-col space-y-2">
+                                <CardTitle className="text-2xl">{headerLabel}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {description}
+                            </CardContent>
+                        </div>
+                        <CardFooter className='w-full'>
+                            <InputWithButton
+                                inputPlaceholder="Enter your access token"
+                                onSubmit={handleSubmit}
+                                buttonText="Connect"
+                            />
+                        </CardFooter>
+                    </Card>
+                )
+            }
+
+            return (
+                <Card className="flex flex-col space-y-0 justify-between">
                     <CardHeader className="flex flex-row justify-between items-center">
                         <CardTitle className="flex items-center text-2xl text-green-600">
                             <FaCheckCircle className='mr-2' />
-                            Connected!
+                            Connected to printify!
                         </CardTitle>
-                        <Button variant="ghost" className="text-lg text-red-600" onClick={deletePrintifyData}>
-                            <FaTrash className='text-xl' />
+                        <Button variant="ghost" size="icon" className=" text-red-600" onClick={deletePrintifyData}>
+                            <FaTrash className='text-2xl' />
                         </Button>
                     </CardHeader>
                 </Card>
-            )}
+            )
+        }
+        // TODO: render card template for when its loading, create a separate component for this to use with etsy card
+    }
 
+    const renderEtsyCard = () => {
+        return (
+            <Card className="flex flex-col space-y-0 py-2 justify-between">
+                <div className="flex flex-col">
+                    <CardHeader className="flex flex-col space-y-2">
+                        <CardTitle className="text-2xl">{headerLabel}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {description}
+                    </CardContent>
+                </div>
+                <CardFooter className='w-full'>
+                    <InputWithButton
+                        inputPlaceholder="Enter your access token"
+                        onSubmit={handleSubmit}
+                        buttonText="Connect"
+                    />
+                </CardFooter>
+            </Card>
+        )
+    }
+
+    return (
+        <div className='w-full'>
+            {provider === 'printify' && renderPrintifyCard()}
+            {provider === 'etsy' && renderEtsyCard()}
         </div>
     );
 };
