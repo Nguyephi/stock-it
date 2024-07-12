@@ -44,16 +44,27 @@ function Etsy(): OAuthConfig<any> {
     id: 'etsy',
     name: 'Etsy',
     type: 'oauth',
-    authorization: `https://www.etsy.com/oauth/connect?response_type=code&client_id=${process.env.ETSY_CLIENT_ID}&redirect_uri=${encodeURIComponent(`${process.env.NEXTAUTH_URL}/api/auth/callback/etsyy`)}&scope=transactions_r%20transactions_w&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`,
+    authorization: {
+      url: TOKEN_HOST + AUTHORIZE_PATH,
+      params: {
+        response_type: 'code',
+        client_id: process.env.ETSY_CLIENT_ID!,
+        redirect_uri: process.env.NEXTAUTH_URL + REDIRECT_URI,
+        scope: SCOPE.join(' '),
+        state,
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256',
+      },
+    },
     token: {
-      url: 'https://api.etsy.com/v3/public/oauth/token',
+      url: TOKEN_HOST + TOKEN_PATH,
       params: {
         client_id: process.env.AUTH_ETSY_ID!,
         client_secret: process.env.AUTH_ETSY_SECRET!,
         code_verifier: codeVerifier,
       },
     },
-    userinfo: 'https://api.etsy.com/v3/public/users/me',
+    userinfo: TOKEN_HOST + USER_INFO_PATH,
     clientId: process.env.AUTH_ETSY_ID!,
     clientSecret: process.env.AUTH_ETSY_SECRET!,
     async profile(profile, token) {
