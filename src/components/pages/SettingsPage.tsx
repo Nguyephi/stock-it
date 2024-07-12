@@ -7,7 +7,7 @@ import { storePrintifyAccessToken } from '@/actions/printify/access-token';
 import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
-import { signIn } from 'next-auth/react';
+import { handleEtsyOauth } from '@/data/etsy';
 
 const SettingsPage = () => {
     const { data: user } = useUserStore();
@@ -27,7 +27,7 @@ const SettingsPage = () => {
                     provider="etsy"
                     headerLabel="Connect your etsy"
                     description="Using oAuth2"
-                    onClick={() => signIn('etsy')}
+                    onClick={() => handleEtsyOauth()}
                 >
                 </ShopConnectCard>
             </div>
