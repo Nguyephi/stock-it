@@ -58,6 +58,8 @@ function Etsy(): OAuthConfig<any> {
     token: {
       url: 'https://api.etsy.com/v3/public/oauth/token',
       params: {
+        grant_type: 'authorization_code',
+        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/etsy`,
         client_id: process.env.AUTH_ETSY_ID!,
         client_secret: process.env.AUTH_ETSY_SECRET!,
         code_verifier: codeVerifier,
