@@ -47,7 +47,7 @@ function Etsy(): OAuthConfig<any> {
       params: {
         response_type: 'code',
         client_id: process.env.AUTH_ETSY_ID!,
-        redirect_uri: process.env.NEXTAUTH_URL + REDIRECT_URI,
+        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/etsy`,
         scope: SCOPE.join(' '),
         state,
         code_challenge: codeChallenge,
@@ -55,14 +55,14 @@ function Etsy(): OAuthConfig<any> {
       },
     },
     token: {
-      url: TOKEN_HOST + TOKEN_PATH,
+      url: 'https://api.etsy.com/v3/public/oauth/token',
       params: {
         client_id: process.env.AUTH_ETSY_ID!,
         client_secret: process.env.AUTH_ETSY_SECRET!,
         code_verifier: codeVerifier,
       },
     },
-    userinfo: TOKEN_HOST + USER_INFO_PATH,
+    userinfo: 'https://api.etsy.com/v3/public/users/me',
     clientId: process.env.AUTH_ETSY_ID!,
     clientSecret: process.env.AUTH_ETSY_SECRET!,
     async profile(profile, token) {
