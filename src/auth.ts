@@ -68,6 +68,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true
     },
     async session({ session, token }) {
+      console.log("session session", session)
+      console.log("token token", token)
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
