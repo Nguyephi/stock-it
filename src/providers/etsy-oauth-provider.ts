@@ -56,16 +56,37 @@ function Etsy(): OAuthConfig<any> {
       },
     },
     token: {
-      url: 'https://api.etsy.com/v3/public/oauth/token',
-      params: {
-        grant_type: 'authorization_code',
-        redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/etsy`,
-        client_id: process.env.AUTH_ETSY_ID!,
-        client_secret: process.env.AUTH_ETSY_SECRET!,
-        code_verifier: codeVerifier,
+      url: `${TOKEN_HOST}${TOKEN_PATH}`,
+      async request(context: any) {
+        const params = new URLSearchParams();
+        params.append('grant_type', 'authorization_code');
+        params.append('client_id', process.env.AUTH_ETSY_ID!);
+        params.append('redirect_uri', `${process.env.NEXTAUTH_URL}${REDIRECT_URI}`);
+        params.append('code', context.params.code);
+        params.append('code_verifier', codeVerifier);
+
+        const res = await fetch(`${TOKEN_HOST}${TOKEN_PATH}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString(),
+        });
+
+        const data = await res.json();
+        return { tokens: data };
       },
     },
-    userinfo: 'https://api.etsy.com/v3/public/users/me',
+    userinfo: {
+      url: `${TOKEN_HOST}${USER_INFO_PATH}`,
+      async request(context: any) {
+        const res = await fetch(`${TOKEN_HOST}${USER_INFO_PATH}`, {
+          headers: {
+            'Authorization': `Bearer ${context.tokens.access_token}`,
+          },
+        });
+        const profile = await res.json();
+        return { profile };
+      },
+    },
     clientId: process.env.AUTH_ETSY_ID!,
     clientSecret: process.env.AUTH_ETSY_SECRET!,
     async profile(profile, token) {

@@ -31,6 +31,6 @@ export default {
                 throw new Error("Invalid credentials!")
             }
         }),
-        Etsy()
+        Etsy
     ]
 } satisfies NextAuthConfig
