@@ -14,9 +14,8 @@ export async function fetchEtsyUserData(accessToken: string) {
 }
 
 export const handleEtsyOauth = async () => {
-    console.log('click');
     try {
-        const response = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/etsy/connect`);
+        const response = await fetch('/api/auth/etsy/connect');
         const data = await response.json();
         // Redirect the user to the authorization URL
         window.location.href = data.authorizationUrl;

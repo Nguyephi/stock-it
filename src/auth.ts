@@ -25,7 +25,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user, account }) {
-      console.log("account")
       // Allow oAuth w/o email verification
       if (account?.provider !== "credentials") {
         return true;
