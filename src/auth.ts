@@ -77,11 +77,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session;
     },
-    async jwt({ token, user, trigger, profile }) {
+    async jwt({ token, user, trigger, profile, account }) {
       console.log("token", token)
       console.log("user", user)
       console.log("trigger", trigger)
       console.log("profile", profile)
+      console.log("account", account)
       if (trigger === "signIn") {
         if (user && user.id) {
           const existingUser = await getUserById(user.id);
