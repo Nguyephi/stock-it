@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs'
 import type { NextAuthConfig } from "next-auth"
 
 import Credentials from "next-auth/providers/credentials"
-import Facebook from "next-auth/providers/facebook"
 
+import Etsy from './providers/etsy-oauth-provider'
 import { SigninSchema } from "@/schema"
 import { getUserByEmail } from "@/data/user"
 
@@ -31,6 +31,6 @@ export default {
                 throw new Error("Invalid credentials!")
             }
         }),
-        Facebook
+        Etsy()
     ]
 } satisfies NextAuthConfig

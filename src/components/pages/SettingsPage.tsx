@@ -7,6 +7,7 @@ import { storePrintifyAccessToken } from '@/actions/printify/access-token';
 import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
+import { signIn } from 'next-auth/react';
 
 const SettingsPage = () => {
     const { data: user } = useUserStore();
@@ -18,14 +19,15 @@ const SettingsPage = () => {
                 <ShopConnectCard
                     provider="printify"
                     headerLabel="Connect your printify"
-                    description="Grab your personal access token from your printify account and paste it here."
+                    description="Grab your personal access token from printify and paste it here."
                     handleSubmit={(values) => storePrintifyAccessToken(values)}
                 >
                 </ShopConnectCard>
                 <ShopConnectCard
                     provider="etsy"
                     headerLabel="Connect your etsy"
-                    description="Add input and button here"
+                    description="Using oAuth2"
+                    onClick={() => signIn('etsy')}
                 >
                 </ShopConnectCard>
             </div>

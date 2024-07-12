@@ -27,6 +27,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account }) {
       // Allow oAuth w/o email verification
       if (account?.provider !== "credentials") {
+        if (account?.provider === "etsy" && user && user.id) {
+          const existingUser = await getUserById(user.id);
+          if (!existingUser) {
+            return false;
+          }
+          await db.account.upsert({
+            where: {
+              provider_providerAccountId: {
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+              },
+            },
+            update: { userId: existingUser.id },
+            create: {
+              userId: existingUser.id,
+              type: account.type,
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+              refresh_token: account.refresh_token,
+              access_token: account.access_token,
+              expires_at: account.expires_at
+            },
+          });
+          return true;
+        }
         return true;
       }
 

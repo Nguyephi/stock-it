@@ -21,13 +21,15 @@ interface ShopConnectCardProps {
     headerLabel?: string;
     description?: string;
     handleSubmit?: (value: z.infer<typeof InputSchema>) => Promise<{ error?: string; success?: string } | void>;
+    onClick?: () => void;
 }
 
 const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     provider,
     headerLabel,
     description,
-    handleSubmit
+    handleSubmit,
+    onClick
 }) => {
     const { success, clearMessages } = useAlertStore();
     const { data: printify, loading: printifyLoading, fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
@@ -94,11 +96,18 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
                     </CardContent>
                 </div>
                 <CardFooter className='w-full'>
-                    <InputWithButton
+                    <Button
+                        onClick={onClick}
+                        className='h-12'
+                        size='lg'
+                    >
+                        Connect
+                    </Button>
+                    {/* <InputWithButton
                         inputPlaceholder="Enter your access token"
                         onSubmit={handleSubmit}
                         buttonText="Connect"
-                    />
+                    /> */}
                 </CardFooter>
             </Card>
         )
