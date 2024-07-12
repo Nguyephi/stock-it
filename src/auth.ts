@@ -28,34 +28,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       console.log("account")
       // Allow oAuth w/o email verification
       if (account?.provider !== "credentials") {
-        if (account?.provider === "etsy" && user && user.id) {
-          const existingUser = await getUserById(user.id);
-          if (!existingUser) {
-            return false;
-          }
-          await db.account.upsert({
-            where: {
-              provider_providerAccountId: {
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-              },
-            },
-            update: { userId: existingUser.id },
-            create: {
-              userId: existingUser.id,
-              type: account.type,
-              provider: account.provider,
-              providerAccountId: account.providerAccountId,
-              refresh_token: account.refresh_token,
-              access_token: account.access_token,
-              expires_at: account.expires_at
-            },
-          });
-          return true;
-        }
         return true;
       }
-
       // Prevent signin without email verification
       if (user && user.id) {
         const existingUser = await getUserById(user.id);
@@ -64,12 +38,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return false;
         }
       }
-
       return true
     },
     async session({ session, token }) {
-      console.log("session session", session)
-      console.log("token token", token)
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
@@ -79,12 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session;
     },
-    async jwt({ token, user, trigger, profile, account }) {
-      console.log("token", token)
-      console.log("user", user)
-      console.log("trigger", trigger)
-      console.log("profile", profile)
-      console.log("account", account)
+    async jwt({ token, user, trigger }) {
       if (trigger === "signIn") {
         if (user && user.id) {
           const existingUser = await getUserById(user.id);
