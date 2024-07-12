@@ -18,7 +18,6 @@ function generateRandomString(length: number): string {
   return randomString;
 }
 
-// Function to base64 URL encode an ArrayBuffer
 function base64URLEncode(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
   let binary = '';
@@ -29,7 +28,6 @@ function base64URLEncode(buffer: ArrayBuffer): string {
     .replace(/=+$/, '');
 }
 
-// Function to generate PKCE code challenge
 function generateCodeChallenge(codeVerifier: string): string {
   const buffer = new TextEncoder().encode(codeVerifier);
   return base64URLEncode(buffer);
@@ -48,7 +46,7 @@ function Etsy(): OAuthConfig<any> {
       url: TOKEN_HOST + AUTHORIZE_PATH,
       params: {
         response_type: 'code',
-        client_id: process.env.ETSY_CLIENT_ID!,
+        client_id: process.env.AUTH_ETSY_ID!,
         redirect_uri: process.env.NEXTAUTH_URL + REDIRECT_URI,
         scope: SCOPE.join(' '),
         state,
