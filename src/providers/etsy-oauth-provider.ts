@@ -1,6 +1,7 @@
 
 import { OAuthConfig } from 'next-auth/providers';
 
+const HOST = 'https://etsy.com';
 const TOKEN_HOST = 'https://api.etsy.com';
 const AUTHORIZE_PATH = '/oauth/connect';
 const TOKEN_PATH = '/v3/public/oauth/token';
@@ -43,7 +44,7 @@ function Etsy(): OAuthConfig<any> {
     name: 'Etsy',
     type: 'oauth',
     authorization: {
-      url: TOKEN_HOST + AUTHORIZE_PATH,
+      url: HOST + AUTHORIZE_PATH,
       params: {
         response_type: 'code',
         client_id: process.env.AUTH_ETSY_ID!,
