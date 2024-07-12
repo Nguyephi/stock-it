@@ -62,7 +62,7 @@ export function InputWithButton({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full'>
-        <div className='mb-2 space-y-4'>
+        <div className='space-y-4'>
           <FormField
             control={form.control}
             name="input"
