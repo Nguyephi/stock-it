@@ -22,7 +22,7 @@ async function generateCodeChallenge(codeVerifier: string): Promise<string> {
 
 const clientId = process.env.AUTH_ETSY_ID!;
 const redirectUri = `https://stock-it.vercel.app/api/auth/etsy/callback`;
-const scopes = ['transactions_r', 'transactions_w', 'profile_r']; // Define your required scopes
+const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']; // Define your required scopes
 const state = base64URLEncode(crypto.getRandomValues(new Uint8Array(32)));
 const codeVerifier = base64URLEncode(crypto.getRandomValues(new Uint8Array(32)));
 const codeChallenge = await generateCodeChallenge(codeVerifier);
