@@ -3,7 +3,6 @@ import { db } from '@/lib/db';
 import { deleteEtsyOAuthState, getEtsyOAuthState } from '@/data/etsy';
 
 export async function GET(req: NextRequest) {
-  console.log('GETT', req);
   try {
     const {searchParams} = new URL(req.url);
     const code = searchParams.get('code');
@@ -12,13 +11,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Missing code or state' }, { status: 400 });
     }
     const oAuthState = await getEtsyOAuthState(state);
-
+    console.log('oAuthState', oAuthState);
     if (!oAuthState) {
       return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
     }
 
     const {codeVerifier} = oAuthState;
-
+    console.log('codeVerifier', codeVerifier);
     const tokenResponse = await fetch('https://api.etsy.com/v3/public/oauth/token', {
       method: 'POST',
       headers: {
@@ -33,7 +32,7 @@ export async function GET(req: NextRequest) {
         redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/etsy/callback',
       }),
     });
-
+    console.log('tokenResponse', tokenResponse);
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
       return NextResponse.json({ error: 'Failed to fetch access token', details: errorData }, { status: 400 });
