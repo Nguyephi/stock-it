@@ -37,13 +37,16 @@ export async function GET(req: NextRequest) {
     const { access_token: accessToken } = tokenData;
 
     if (accessToken) {
-      const user_id = accessToken.split('.')[0];
-      const userData = await fetch(`https://api.etsy.com/v3/application/users/${user_id}`, {
+      const userId = accessToken.split('.')[0];
+      console.log('userId', userId);
+      console.log('accessToken', accessToken);
+      const userData = await fetch(`https://api.etsy.com/v3/application/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'x-api-key': process.env.AUTH_ETSY_ID!,
         },
       });
+      console.log('userData', userData);
       if (!userData.ok) {
         const errorData = await userData.json();
         return NextResponse.json({ error: 'Failed to fetch user data', details: errorData }, { status: 400 });
