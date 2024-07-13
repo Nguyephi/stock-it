@@ -3,16 +3,6 @@ import { storeEtsyOauthStateByUserId } from '@/data/etsy';
 import { NextRequest, NextResponse } from 'next/server';
 import { encode } from 'querystring';
 
-function generateRandomString(length: number): string {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-  let randomString = '';
-  const values = crypto.getRandomValues(new Uint8Array(length));
-  values.forEach(value => {
-    randomString += charset[value % charset.length];
-  });
-  return randomString;
-}
-
 function base64URLEncode(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
   let binary = '';
@@ -23,17 +13,19 @@ function base64URLEncode(buffer: ArrayBuffer): string {
     .replace(/=+$/, '');
 }
 
-function generateCodeChallenge(codeVerifier: string): string {
+async function generateCodeChallenge(codeVerifier: string): Promise<string> {
   const buffer = new TextEncoder().encode(codeVerifier);
-  return base64URLEncode(buffer);
+  const hashed = await crypto.subtle.digest('SHA-256', buffer);
+  return base64URLEncode(hashed);
 }
+
 
 const clientId = process.env.AUTH_ETSY_ID!;
 const redirectUri = `https://stock-it.vercel.app/api/auth/etsy/callback`;
 const scopes = ['transactions_r', 'transactions_w']; // Define your required scopes
-const state = generateRandomString(32);
-const codeVerifier = generateRandomString(128);
-const codeChallenge = generateCodeChallenge(codeVerifier);
+const state = base64URLEncode(crypto.getRandomValues(new Uint8Array(32)));
+const codeVerifier = base64URLEncode(crypto.getRandomValues(new Uint8Array(32)));
+const codeChallenge = await generateCodeChallenge(codeVerifier);
 
 const authorizationUrl = `https://www.etsy.com/oauth/connect?` + encode({
   response_type: 'code',
