@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
         code_verifier: codeVerifier,
         client_id: process.env.AUTH_ETSY_ID!,
         client_secret: process.env.AUTH_ETSY_SECRET!,
+        redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/etsy/callback',
       }),
     });
 
