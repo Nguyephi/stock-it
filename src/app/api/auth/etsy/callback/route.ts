@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
 import { deleteEtsyOAuthState, getEtsyOAuthState } from '@/data/etsy';
 
 export async function GET(req: NextRequest) {
@@ -11,13 +10,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Missing code or state' }, { status: 400 });
     }
     const oAuthState = await getEtsyOAuthState(state);
-    console.log('oAuthState', oAuthState);
     if (!oAuthState) {
       return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
     }
 
     const {codeVerifier} = oAuthState;
-    console.log('cb codeVerifier', codeVerifier);
     const tokenResponse = await fetch('https://api.etsy.com/v3/public/oauth/token', {
       method: 'POST',
       headers: {
@@ -31,16 +28,28 @@ export async function GET(req: NextRequest) {
         redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/etsy/callback',
       }),
     });
-    console.log('tokenResponse', tokenResponse);
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
       return NextResponse.json({ error: 'Failed to fetch access token', details: errorData }, { status: 400 });
     }
 
     const tokenData = await tokenResponse.json();
-    console.log('tokenData', tokenData);
 
-    // await deleteEtsyOAuthState(state);
+    if (tokenData.access_token) {
+      const userData = await fetch('https://api.etsy.com/v3/application/users/me', {
+        headers: {
+          Authorization: `Bearer ${tokenData.access_token}`,
+        },
+      });
+      if (!userData.ok) {
+        const errorData = await userData.json();
+        return NextResponse.json({ error: 'Failed to fetch user data', details: errorData }, { status: 400 });
+      }
+      const user = await userData.json();
+      console.log('user!!!!', user);
+    }
+
+    await deleteEtsyOAuthState(state);
     return NextResponse.json({ message: 'OAuth process completed successfully' });
   } catch (error) {
     console.error('OAuth Error:', error);
