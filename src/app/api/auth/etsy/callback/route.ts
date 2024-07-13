@@ -34,11 +34,13 @@ export async function GET(req: NextRequest) {
     }
 
     const tokenData = await tokenResponse.json();
+    const { access_token: accessToken } = tokenData;
 
-    if (tokenData.access_token) {
-      const userData = await fetch('https://api.etsy.com/v3/application/users/me', {
+    if (accessToken) {
+      const user_id = accessToken.split('.')[0];
+      const userData = await fetch(`https://api.etsy.com/v3/application/users/${user_id}`, {
         headers: {
-          Authorization: `Bearer ${tokenData.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           'x-api-key': process.env.AUTH_ETSY_ID!,
         },
       });
