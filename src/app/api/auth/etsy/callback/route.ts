@@ -39,6 +39,7 @@ export async function GET(req: NextRequest) {
       const userData = await fetch('https://api.etsy.com/v3/application/users/me', {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`,
+          'x-api-key': process.env.AUTH_ETSY_ID!,
         },
       });
       if (!userData.ok) {
