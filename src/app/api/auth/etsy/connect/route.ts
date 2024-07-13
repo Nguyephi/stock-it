@@ -27,8 +27,8 @@ function generateCodeChallenge(codeVerifier: string): string {
 }
 
 const clientId = process.env.AUTH_ETSY_ID!;
-const redirectUri = `${process.env.NEXTAUTH_URL}/api/auth/callback/etsy`;
-const scopes = ['SCOPE1', 'SCOPE2']; // Define your required scopes
+const redirectUri = `${process.env.NEXTAUTH_URL}/api/auth/etsy/callback`;
+const scopes = ['transactions_r', 'transactions_w']; // Define your required scopes
 const state = generateRandomString(32);
 const codeVerifier = generateRandomString(128);
 const codeChallenge = generateCodeChallenge(codeVerifier);
