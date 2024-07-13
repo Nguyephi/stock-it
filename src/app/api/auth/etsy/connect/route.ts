@@ -1,3 +1,5 @@
+import { auth } from '@/auth';
+import { storeEtsyOauthStateByUserId } from '@/data/etsy';
 import { NextRequest, NextResponse } from 'next/server';
 import { encode } from 'querystring';
 
@@ -45,7 +47,13 @@ const authorizationUrl = `https://www.etsy.com/oauth/connect?` + encode({
 
 export async function GET(req: NextRequest) {
   console.log('server');
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return NextResponse.json({ error: 'User is not authenticated!' }, { status: 401 });
+  }
   try {
+    await storeEtsyOauthStateByUserId(userId, state, codeVerifier);
     return NextResponse.json({ authorizationUrl });
   } catch (error) {
     console.error('OAuth Error:', error);

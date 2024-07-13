@@ -1,3 +1,5 @@
+import { db } from "@/lib/db";
+
 export async function fetchEtsyUserData(accessToken: string) {
     const response = await fetch('https://api.etsy.com/v3/application/users/me', {
         headers: {
@@ -20,5 +22,39 @@ export const handleEtsyOauth = async () => {
         window.location.href = data.authorizationUrl;
     } catch (error) {
         console.error('Error initiating Etsy OAuth:', error);
+    }
+}
+
+export const storeEtsyOauthStateByUserId = async (userId: string, state: string, codeVerifier: string) => {
+    const expiresAt = new Date(new Date().getTime() + 3600 * 1000);
+    try {
+        await db.etsyOAuthState.create({
+            data: {
+                userId,
+                state,
+                codeVerifier,
+                expiresAt,
+            },
+        });
+    } catch (error) {
+        console.error('Error storing Etsy OAuth state:', error);
+    }
+
+}
+
+export const getEtsyOAuthState = async (state: string) => {
+    try {
+        const stateData = await db.etsyOAuthState.findUnique({ where: { state } });
+        return stateData;
+    } catch {
+        return null;
+    }
+}
+
+export const deleteEtsyOAuthState = async (state: string) => {
+    try {
+        await db.etsyOAuthState.delete({ where: { state } });
+    } catch {
+        return null;
     }
 }
