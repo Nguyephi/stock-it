@@ -21,14 +21,13 @@ export async function GET(req: NextRequest) {
     const tokenResponse = await fetch('https://api.etsy.com/v3/public/oauth/token', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
-      body: new URLSearchParams({
+      body: JSON.stringify({
         grant_type: 'authorization_code',
         code,
         code_verifier: codeVerifier,
         client_id: process.env.AUTH_ETSY_ID!,
-        client_secret: process.env.AUTH_ETSY_SECRET!,
         redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/etsy/callback',
       }),
     });

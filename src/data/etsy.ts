@@ -39,7 +39,6 @@ export const storeEtsyOauthStateByUserId = async (userId: string, state: string,
     } catch (error) {
         console.error('Error storing Etsy OAuth state:', error);
     }
-
 }
 
 export const getEtsyOAuthState = async (state: string) => {
