@@ -57,3 +57,31 @@ export const deleteEtsyOAuthState = async (state: string) => {
         return null;
     }
 }
+
+export const storeEtsyAccessToken = async (userId: string, accessToken: string, providerAccountId: string) => {
+    try {
+        const accountData = await db.account.upsert({
+            where: {
+                provider_providerAccountId: {
+                    provider: 'etsy',
+                    providerAccountId: providerAccountId,
+                },
+            },
+            update: {
+                access_token: accessToken,
+                updatedAt: new Date(),
+            },
+            create: {
+                userId,
+                type: 'etsy',
+                provider: 'etsy',
+                providerAccountId: providerAccountId,
+                access_token: accessToken,
+            },
+        });
+
+        return accountData;
+    } catch (error) {
+        console.error('Error storing Etsy access token:', error);
+    }
+}
