@@ -46,7 +46,7 @@ const authorizationUrl = `https://www.etsy.com/oauth/connect?` + encode({
 });
 
 export async function GET(req: NextRequest) {
-  console.log('server');
+  console.log('server', codeVerifier);
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {

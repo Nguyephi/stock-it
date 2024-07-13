@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     }
 
     const {codeVerifier} = oAuthState;
-    console.log('codeVerifier', codeVerifier);
+    console.log('cb codeVerifier', codeVerifier);
     const tokenResponse = await fetch('https://api.etsy.com/v3/public/oauth/token', {
       method: 'POST',
       headers: {
