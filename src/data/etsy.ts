@@ -17,7 +17,6 @@ export const handleEtsyOauth = async () => {
     try {
         const response = await fetch('/api/auth/etsy/connect');
         const data = await response.json();
-        // Redirect the user to the authorization URL
         window.location.href = data.authorizationUrl;
     } catch (error) {
         console.error('Error initiating Etsy OAuth:', error);
