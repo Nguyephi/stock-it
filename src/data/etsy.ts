@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
 
+export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
+
 export async function fetchEtsyUserData(accessToken: string) {
     const response = await fetch('https://api.etsy.com/v3/application/users/me', {
         headers: {
@@ -58,7 +60,14 @@ export const deleteEtsyOAuthState = async (state: string) => {
     }
 }
 
-export const storeEtsyAccessToken = async (userId: string, accessToken: string, providerAccountId: string) => {
+export const storeEtsyAccessToken = async (
+    userId: string,
+    providerAccountId: string,
+    accessToken: string,
+    refreshToken: string,
+    expiresIn: number,
+    tokenType: string
+) => {
     try {
         const accountData = await db.account.upsert({
             where: {
@@ -77,11 +86,30 @@ export const storeEtsyAccessToken = async (userId: string, accessToken: string, 
                 provider: 'etsy',
                 providerAccountId: providerAccountId,
                 access_token: accessToken,
+                refresh_token: refreshToken,
+                expires_at: expiresIn,
+                token_type: tokenType,
+                scope: scopes.join(' '),
             },
         });
 
         return accountData;
     } catch (error) {
         console.error('Error storing Etsy access token:', error);
+    }
+}
+
+export const deleteEtsyAccessToken = async (userId: string, providerAccountId: string) => {
+    try {
+        await db.account.delete({
+            where:{
+                provider_providerAccountId: {
+                    provider: 'etsy',
+                    providerAccountId: providerAccountId,
+                },
+            }
+        });
+    } catch (error) {
+        console.error('Error deleting Etsy access token:', error);
     }
 }

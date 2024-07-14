@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { deleteEtsyOAuthState, getEtsyOAuthState, storeEtsyOauthStateByUserId } from '@/data/etsy';
+import { deleteEtsyOAuthState, getEtsyOAuthState, scopes, storeEtsyOauthStateByUserId } from '@/data/etsy';
 import { NextRequest, NextResponse } from 'next/server';
 import { encode } from 'querystring';
 
@@ -22,7 +22,7 @@ async function generateCodeChallenge(codeVerifier: string): Promise<string> {
 
 const clientId = process.env.AUTH_ETSY_ID!;
 const redirectUri = `https://stock-it.vercel.app/api/auth/etsy/callback`;
-const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']; // Define your required scopes
+const etsyScopes = scopes
 const state = base64URLEncode(crypto.getRandomValues(new Uint8Array(32)));
 const codeVerifier = base64URLEncode(crypto.getRandomValues(new Uint8Array(32)));
 const codeChallenge = await generateCodeChallenge(codeVerifier);
@@ -31,14 +31,13 @@ const authorizationUrl = `https://www.etsy.com/oauth/connect?` + encode({
   response_type: 'code',
   client_id: clientId,
   redirect_uri: redirectUri,
-  scope: scopes.join(' '),
+  scope: etsyScopes.join(' '),
   state,
   code_challenge: codeChallenge,
   code_challenge_method: 'S256',
 });
 
 export async function GET(req: NextRequest) {
-  console.log('server');
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {

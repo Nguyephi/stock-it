@@ -41,7 +41,12 @@ export async function GET(req: NextRequest) {
     }
 
     const tokenData = await tokenResponse.json();
-    const { access_token: accessToken } = tokenData;
+    const { 
+      access_token: accessToken, 
+      refresh_token: refreshToken, 
+      expires_in: expiresIn, 
+      token_type: tokenType 
+    } = tokenData;
 
     if (accessToken) {
       const providerAccountId = accessToken.split('.')[0];
@@ -60,11 +65,19 @@ export async function GET(req: NextRequest) {
       const user = await userData.json();
       console.log('user!!!!', user);
       console.log("tokenData", tokenData);
-      const storedData = await storeEtsyAccessToken(userId, accessToken, providerAccountId);
-      // if (!storedData.error) 
+      const storedData = await storeEtsyAccessToken(
+        userId,
+        providerAccountId,
+        accessToken,
+        refreshToken,
+        expiresIn,
+        tokenType
+      );
+      if (storedData) {
+        await deleteEtsyOAuthState(state);
+      }
     }
 
-    await deleteEtsyOAuthState(state);
     return NextResponse.json({ message: 'OAuth process completed successfully' });
   } catch (error) {
     console.error('OAuth Error:', error);
