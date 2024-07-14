@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteEtsyOAuthState, getEtsyOAuthState, storeEtsyAccessToken } from '@/data/etsy';
 import { auth } from "@/auth";
+import { encryptToken } from '@/lib/jwt';
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -50,8 +51,6 @@ export async function GET(req: NextRequest) {
 
     if (accessToken) {
       const providerAccountId = accessToken.split('.')[0];
-      console.log('userId', providerAccountId);
-      console.log('accessToken', accessToken);
       const userData = await fetch(`https://api.etsy.com/v3/application/users/${providerAccountId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -65,11 +64,13 @@ export async function GET(req: NextRequest) {
       const user = await userData.json();
       console.log('user!!!!', user);
       console.log("tokenData", tokenData);
+      const encryptedAccessToken = encryptToken(accessToken);
+      const encryptedRefreshToken = encryptToken(refreshToken);
       const storedData = await storeEtsyAccessToken(
         userId,
         providerAccountId,
-        accessToken,
-        refreshToken,
+        encryptedAccessToken,
+        encryptedRefreshToken,
         expiresIn,
         tokenType
       );
