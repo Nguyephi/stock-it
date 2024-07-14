@@ -7,7 +7,7 @@ import { storePrintifyAccessToken } from '@/actions/printify/access-token';
 import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
-import { handleEtsyOauth } from '@/data/etsy';
+import { handleEtsyOauth } from '@/actions/etsy/access-token';
 
 const SettingsPage = () => {
     const { data: user } = useUserStore();

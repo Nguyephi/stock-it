@@ -2,31 +2,6 @@ import { db } from "@/lib/db";
 
 export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
 
-export async function fetchEtsyUserData(accessToken: string) {
-    const response = await fetch('https://api.etsy.com/v3/application/users/me', {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch user data');
-    }
-
-    const data = await response.json();
-    return data;
-}
-
-export const handleEtsyOauth = async () => {
-    try {
-        const response = await fetch('/api/auth/etsy/connect');
-        const data = await response.json();
-        window.location.href = data.authorizationUrl;
-    } catch (error) {
-        console.error('Error initiating Etsy OAuth:', error);
-    }
-}
-
 export const storeEtsyOauthStateByUserId = async (userId: string, state: string, codeVerifier: string) => {
     const expiresAt = new Date(new Date().getTime() + 3600 * 1000);
     try {
@@ -96,6 +71,21 @@ export const storeEtsyAccessToken = async (
         return accountData;
     } catch (error) {
         console.error('Error storing Etsy access token:', error);
+    }
+}
+
+export const getEtsyAccessTokenByUserId = async (userId: string) => {
+    try {
+        const accountData = await db.account.findFirst({
+            where: {
+                userId,
+                type: 'etsy',
+            },
+        });
+
+        return accountData;
+    } catch (error) {
+        console.error('Error fetching Etsy access token:', error);
     }
 }
 
