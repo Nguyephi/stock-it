@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ message: 'OAuth process completed successfully' });
+    return NextResponse.redirect(new URL('/dashboard/settings', req.url));
   } catch (error) {
     console.error('OAuth Error:', error);
     return NextResponse.json({ error: 'OAuth process failed' }, { status: 500 });
