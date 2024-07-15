@@ -73,7 +73,6 @@ const SettingsPage = () => {
                         .then((data) => {
                             if (!data) return
                             const { error } = data
-                            console.log("etsy data", data)
                             if (error) setError(data.error)
                             setProvider("etsy")
                         })

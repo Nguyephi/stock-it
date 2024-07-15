@@ -120,7 +120,12 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    return NextResponse.redirect(new URL('/dashboard/settings', req.url));
+    /**
+     * Return to dashboard with success message
+     */
+    redirectUrl.searchParams.set("success", "Connected to Etsy!");
+    redirectUrl.searchParams.set("provider", "etsy");
+    return NextResponse.redirect(redirectUrl);
   } catch (error) {
     console.error('OAuth Error:', error);
     redirectUrl.searchParams.set("error", "OAuth process failed");

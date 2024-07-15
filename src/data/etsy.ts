@@ -2,12 +2,16 @@ import { db } from "@/lib/db";
 
 export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
 
+/**
+ * initiates Etsy OAuth
+ * @returns
+ */
 export const handleEtsyOauth = async () => {
     try {
         const response = await fetch('/api/auth/etsy/connect');
         const data = await response.json();
         window.location.href = new URL(data.authorizationUrl).toString();
-        return { success: 'Connecting to Etsy...' }
+        return
     } catch (error) {
         console.error('Error initiating Etsy OAuth:', error);
         return { error: 'Something went wrong!' }
@@ -47,6 +51,16 @@ export const deleteEtsyOAuthState = async (state: string) => {
     }
 }
 
+/**
+ * Used to store Etsy access token
+ * @param userId 
+ * @param providerAccountId 
+ * @param accessToken 
+ * @param refreshToken 
+ * @param expiresIn 
+ * @param tokenType 
+ * @returns 
+ */
 export const storeEtsyAccessToken = async (
     userId: string,
     providerAccountId: string,
@@ -86,6 +100,15 @@ export const storeEtsyAccessToken = async (
     }
 }
 
+export const isEtsyAccessTokenValid = async (createdAt: Date, expiresAt: number | null) => {
+    try {
+        const expiryTime = new Date(createdAt.getTime() + (expiresAt || 3600) * 1000);
+        return new Date() > expiryTime;;
+    } catch (error) {
+        console.error('Error checking Etsy access token validity:', error);
+    }
+}
+
 export const getEtsyAccessTokenByUserId = async (userId: string) => {
     try {
         const accountData = await db.account.findFirst({
@@ -94,6 +117,15 @@ export const getEtsyAccessTokenByUserId = async (userId: string) => {
                 type: 'etsy',
             },
         });
+
+        if (!accountData) {
+            throw new Error('No access token found');
+        }
+        const isTokenValidated = await isEtsyAccessTokenValid(accountData.createdAt, accountData.expires_at);
+
+        if (!isTokenValidated) {
+            // TODO: refresh token
+        }
 
         return accountData;
     } catch (error) {
@@ -104,7 +136,7 @@ export const getEtsyAccessTokenByUserId = async (userId: string) => {
 export const deleteEtsyAccessTokenProviderAccountId = async (userId: string, providerAccountId: string) => {
     try {
         await db.account.delete({
-            where:{
+            where: {
                 provider_providerAccountId: {
                     provider: 'etsy',
                     providerAccountId: providerAccountId,
@@ -113,26 +145,5 @@ export const deleteEtsyAccessTokenProviderAccountId = async (userId: string, pro
         });
     } catch (error) {
         console.error('Error deleting Etsy access token:', error);
-    }
-}
-
-export const isEtsyAccessTokenValid = async (userId: string) => {
-    try {
-        const accountData = await db.account.findFirst({
-            where: {
-                userId,
-                type: 'etsy',
-            },
-        });
-
-        if (!accountData) {
-            return false;
-        }
-
-        const expiryTime = new Date(accountData.createdAt.getTime() + (accountData.expires_at || 3600) * 1000);
-
-        return new Date() > expiryTime;;
-    } catch (error) {
-        console.error('Error checking Etsy access token validity:', error);
     }
 }
