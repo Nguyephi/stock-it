@@ -107,7 +107,7 @@ export async function GET(req: NextRequest) {
     /**
      * Store access token and delete oauth state
      */
-    const storedData = await storeEtsyAccessToken(
+    await storeEtsyAccessToken(
       userId,
       providerAccountId,
       encryptedAccessToken,
@@ -116,15 +116,7 @@ export async function GET(req: NextRequest) {
       tokenType
     );
 
-    console.log("storedData", storedData);
-    if (storedData) {
-      await deleteEtsyOAuthState(state);
-      /**
-       * Return to dashboard with success message
-       */
-    }
-
-
+    await deleteEtsyOAuthState(state);
     redirectUrl.searchParams.set("success", "Connected to Etsy!");
     redirectUrl.searchParams.set("provider", "etsy");
     return NextResponse.redirect(redirectUrl);
