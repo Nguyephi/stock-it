@@ -44,7 +44,15 @@ const SettingsPage = () => {
                     provider="etsy"
                     headerLabel="Connect your etsy"
                     description="Using oAuth2"
-                    onClick={() => handleEtsyOauthByUserId()}
+                    onClick={() => handleEtsyOauthByUserId()
+                        .then((data) => {
+                            if (!data) return
+                            const { error, success } = data
+                            if (error) setError(data.error)
+                            if (success) setSuccess(data.success)
+                            setProvider("etsy")
+                        })
+                    }
                 >
                 </ShopConnectCard>
             </div>
