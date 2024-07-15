@@ -43,9 +43,9 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
              *  */
             fetchPrintifyData()
         }
-        return () => {
-            clearMessages();
-        };
+        // return () => {
+        //     clearMessages();
+        // };
     }, [printify, success]);
 
     const renderAlert = () => {
