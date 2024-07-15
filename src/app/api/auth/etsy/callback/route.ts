@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteEtsyOAuthState, getEtsyAccessTokenByUserId, getEtsyOAuthState, storeEtsyAccessToken } from '@/data/etsy';
+import { deleteEtsyOAuthState, getEtsyAccessTokenByUserId, getEtsyOAuthStateByUserId, storeEtsyAccessToken } from '@/data/etsy';
 import { auth } from "@/auth";
 import { encryptToken } from '@/lib/jwt';
 
@@ -12,7 +12,9 @@ export async function GET(req: NextRequest) {
 
   const currAccessToken = await getEtsyAccessTokenByUserId(userId);
   if (currAccessToken) {
-    return NextResponse.json({ error: 'You already have an Etsy access token!' }, { status: 400 });
+    const redirectUrl = new URL('/dashboard/settings', req.url);
+    redirectUrl.searchParams.set("error" , "You already have an Etsy access token!");
+    return NextResponse.redirect(redirectUrl);
   }
 
   try {
@@ -22,9 +24,9 @@ export async function GET(req: NextRequest) {
     if (!code || !state) {
       return NextResponse.json({ error: 'Missing code or state' }, { status: 400 });
     }
-    const oAuthState = await getEtsyOAuthState(state);
+    const oAuthState = await getEtsyOAuthStateByUserId(userId);
     if (!oAuthState) {
-      return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid state' }, { status: 400 })
     }
 
     const { codeVerifier } = oAuthState;
@@ -47,11 +49,11 @@ export async function GET(req: NextRequest) {
     }
 
     const tokenData = await tokenResponse.json();
-    const { 
-      access_token: accessToken, 
-      refresh_token: refreshToken, 
-      expires_in: expiresIn, 
-      token_type: tokenType 
+    const {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      expires_in: expiresIn,
+      token_type: tokenType
     } = tokenData;
 
     if (accessToken) {
