@@ -11,7 +11,6 @@ import { handleEtsyOauthByUserId } from '@/data/etsy';
 import { storePrintifyAccessToken } from '@/actions/printify/access-token';
 import useUserStore from '@/store/user';
 import useAlertStore from '@/store/alert-message';
-import { set } from 'zod';
 
 const SettingsPage = () => {
     const { data: user } = useUserStore();
@@ -39,9 +38,6 @@ const SettingsPage = () => {
                             const { error, success } = data
                             if (error) setError(data.error)
                             if (success) setSuccess(data.success)
-                            if (searchParams.get("error")) {
-                                setError(searchParams.get("error") ?? undefined)
-                            }
                             setProvider("printify")
                         })
                     }
@@ -57,6 +53,10 @@ const SettingsPage = () => {
                             const { error, success } = data
                             if (error) setError(data.error)
                             if (success) setSuccess(data.success)
+                            console.log('error', searchParams.get("error"))
+                            if (searchParams.get("error")) {
+                                setError(searchParams.get("error") ?? undefined)
+                            }
                             setProvider("etsy")
                         })
                     }
