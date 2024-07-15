@@ -1,5 +1,6 @@
-import { deletePrintifyData, getPrintifyData } from '@/actions/printify/access-token';
 import { create } from 'zustand';
+
+import { deletePrintifyData, getPrintifyData } from '@/actions/printify/access-token';
 
 interface PrintifyState {
     data: any;
@@ -26,6 +27,7 @@ const usePrintifyStore = create<PrintifyState>((set) => ({
     fetchData: async () => {
         set((state) => ({ ...state, loading: true, error: null }));
         try {
+            // TODO: maybe separate prinitdy data into a different model (schema model: printify.storeData -> printifyData)
             const data = await getPrintifyData();
             set((state) => ({ ...state, loading: false, data }));
         } catch (error) {
@@ -42,5 +44,10 @@ const usePrintifyStore = create<PrintifyState>((set) => ({
         }
     }
 }));
+
+export const selectPrintifyData = (state: PrintifyState) => state.data;
+export const selectPrintifyId = (state: PrintifyState) => state.data?.id;
+export const selectPrintifyLoading = (state: PrintifyState) => state.loading;
+export const selectPrintifyError = (state: PrintifyState) => state.error;
 
 export default usePrintifyStore;

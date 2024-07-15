@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from "../atoms/alert";
 import { InputWithButton } from './InputWithButton';
 import { InputSchema } from '@/schema';
 import useAlertStore from '@/store/alert-message';
-import usePrintifyStore from '@/store/printify';
+import usePrintifyStore, { selectPrintifyId, selectPrintifyLoading } from '@/store/printify';
 import { Button } from '../atoms/button';
 
 interface ShopConnectCardProps {
@@ -34,10 +34,12 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     onClick
 }) => {
     const { success, clearMessages, provider: alertProvider, error } = useAlertStore();
-    const { data: printify, loading: printifyLoading, fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
+    const printifyId = usePrintifyStore(selectPrintifyId);
+    const printifyLoading = usePrintifyStore(selectPrintifyLoading);
+    const { fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
 
     useEffect(() => {
-        if (provider === "printify" && success && !printify?.id) {
+        if (provider === "printify" && success && !printifyId) {
             /**
              * Once you store access token in the db add it to app state
              *  */
@@ -46,7 +48,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
         // return () => {
         //     clearMessages();
         // };
-    }, [printify, success]);
+    }, [printifyId, success]);
 
     const renderAlert = () => {
         if (error) {
@@ -74,7 +76,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
 
     const renderPrintifyCard = () => {
         if (!printifyLoading) {
-            if (!printify?.id) {
+            if (!printifyId) {
                 return (
                     <Card className="flex flex-col space-y-0 py-2 justify-between">
                         <div className="flex flex-col">
