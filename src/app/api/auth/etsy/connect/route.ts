@@ -19,7 +19,6 @@ async function generateCodeChallenge(codeVerifier: string): Promise<string> {
   return base64URLEncode(hashed);
 }
 
-
 const clientId = process.env.AUTH_ETSY_ID!;
 const redirectUri = `https://stock-it.vercel.app/api/auth/etsy/callback`;
 const etsyScopes = scopes
