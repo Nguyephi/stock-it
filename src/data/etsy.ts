@@ -133,7 +133,7 @@ export const getEtsyAccessTokenByUserId = async (userId: string) => {
         if (!isTokenValidated) {
             // TODO: refresh token
         }
-
+        console.log('etsy dataaaaa', accountData)
         return accountData;
     } catch (error) {
         console.error('Error fetching Etsy access token:', error);
