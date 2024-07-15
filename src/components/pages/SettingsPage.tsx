@@ -1,18 +1,22 @@
 'use client'
 
 import React, { useEffect } from 'react';
-import useUserStore from '@/store/user';
-import DashboardLayout from '../templates/DashboardLayout';
-import { storePrintifyAccessToken } from '@/actions/printify/access-token';
+import { useSearchParams } from 'next/navigation';
+
 import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
+import DashboardLayout from '../templates/DashboardLayout';
 import { handleEtsyOauthByUserId } from '@/data/etsy';
+import { storePrintifyAccessToken } from '@/actions/printify/access-token';
+import useUserStore from '@/store/user';
 import useAlertStore from '@/store/alert-message';
+import { set } from 'zod';
 
 const SettingsPage = () => {
     const { data: user } = useUserStore();
     const { clearMessages, setError, setSuccess, setProvider } = useAlertStore();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         return () => {
@@ -35,6 +39,9 @@ const SettingsPage = () => {
                             const { error, success } = data
                             if (error) setError(data.error)
                             if (success) setSuccess(data.success)
+                            if (searchParams.get("error")) {
+                                setError(searchParams.get("error") ?? undefined)
+                            }
                             setProvider("printify")
                         })
                     }
