@@ -118,7 +118,6 @@ export const isEtsyAccessTokenValid = async (createdAt: Date, expiresAt: number 
 
 export const getEtsyAccessTokenByUserId = async (userId: string) => {
     try {
-        console.log("user is", userId)
         const accountData = await db.account.findFirst({
             where: {
                 userId,
@@ -126,7 +125,6 @@ export const getEtsyAccessTokenByUserId = async (userId: string) => {
             },
         });
 
-        console.log('etsy dataaaaa', accountData)
         if (!accountData) {
             throw new Error('No access token found');
         }

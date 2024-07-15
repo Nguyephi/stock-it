@@ -1,5 +1,5 @@
 // import { deletePrintifyData, getPrintifyData } from '@/actions/printify/access-token';
-import { getEtsyAccessTokenByUserId } from '@/data/etsy';
+import { getEtsyToken } from '@/actions/etsy/access-token';
 import { create } from 'zustand';
 
 interface EtsyState {
@@ -9,7 +9,7 @@ interface EtsyState {
     fetchDataStart: () => void;
     fetchDataSuccess: (data: any) => void;
     fetchDataFailure: (error: string) => void;
-    fetchData: (userId: string) => void;
+    fetchData: () => void;
     deleteData: () => void;
 }
 
@@ -24,11 +24,10 @@ const useEtsyStore = create<EtsyState>((set) => ({
     fetchDataStart: () => set((state) => ({ ...state, loading: true, error: null })),
     fetchDataSuccess: (data) => set((state) => ({ ...state, loading: false, data })),
     fetchDataFailure: (error) => set((state) => ({ ...state, loading: false, error })),
-    fetchData: async (userId) => {
+    fetchData: async () => {
         set((state) => ({ ...state, loading: true, error: null }));
         try {
-            const data = await getEtsyAccessTokenByUserId(userId);
-            console.log("fetchdata", data)
+            const data = await getEtsyToken();
             set((state) => ({ ...state, loading: false, data }));
         } catch (error) {
             set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));

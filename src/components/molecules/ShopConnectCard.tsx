@@ -35,7 +35,6 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     handleSubmit,
     onClick
 }) => {
-    const {data: user} = useUserStore();
     const { success, error, provider: alertProvider } = useAlertStore();
     const printifyId = usePrintifyStore(selectPrintifyId);
     const printifyLoading = usePrintifyStore(selectPrintifyLoading);
@@ -44,7 +43,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     const etsy = useEtsyStore(selectEtsyData);
 
     useEffect(() => {
-        if (provider === "printify" && success && !printifyId) {
+        if (provider === "printify" && !printifyId && success) {
             /**
              * Once you store access token in the db add it to app state
              *  */
@@ -53,11 +52,11 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     }, [printifyId, success]);
 
     useEffect(() => {
-        if (user?.id && provider === "etsy" && success && !etsy) {
+        if (provider === "etsy" && !etsy && success) {
             /**
              * Once you store access token in the db add it to app state
              *  */
-            fetchEtsyData(user?.id)
+            fetchEtsyData();
         }
     }, [etsy, success]);
 
