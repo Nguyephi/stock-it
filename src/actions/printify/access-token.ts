@@ -50,7 +50,7 @@ export const storePrintifyAccessToken = async (values: z.infer<typeof InputSchem
             where: { userId },
             update: { accessToken: encryptedToken },
             create: {
-                userId: userId as string,
+                userId: userId,
                 accessToken: encryptedToken,
                 refreshToken: '',
                 expiresAt: new Date(),
