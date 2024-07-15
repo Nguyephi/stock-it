@@ -19,17 +19,17 @@ const SettingsPage = () => {
     const paramError = searchParams.get("error")
     const paramProvider = searchParams.get("provider")
 
-    useEffect(() => {
-        if (paramError) {
-            setError(paramError)
-        }
-    }, [paramError])
+    if (paramError) {
+        setError(paramError)
+    }
+    // useEffect(() => {
+    // }, [paramError])
 
-    useEffect(() => {
-        if (paramProvider) {
-            setProvider(paramProvider)
-        }
-    }, [paramProvider])
+    if (paramProvider) {
+        setProvider(paramProvider)
+    }
+    // useEffect(() => {
+    // }, [paramProvider])
 
     useEffect(() => {
         return () => {
