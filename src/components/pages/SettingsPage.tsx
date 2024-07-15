@@ -35,6 +35,7 @@ const SettingsPage = () => {
 
     useEffect(() => {
         return () => {
+            console.log("clearing messages")
             clearMessages();
         };
     }, [clearMessages]);
@@ -67,6 +68,7 @@ const SettingsPage = () => {
                         .then((data) => {
                             if (!data) return
                             const { error, success } = data
+                            console.log("etsy data", data)
                             if (error) setError(data.error)
                             if (success) setSuccess(data.success)
                             setProvider("etsy")
