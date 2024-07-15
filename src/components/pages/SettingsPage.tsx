@@ -53,9 +53,10 @@ const SettingsPage = () => {
                             const { error, success } = data
                             if (error) setError(data.error)
                             if (success) setSuccess(data.success)
-                            console.log('error', searchParams.get("error"))
-                            if (searchParams.get("error")) {
-                                setError(searchParams.get("error") ?? undefined)
+                            const paramError = searchParams.get("error")
+                            console.log('error', paramError)
+                            if (paramError) {
+                                setError(paramError)
                             }
                             setProvider("etsy")
                         })
