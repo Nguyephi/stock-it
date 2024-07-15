@@ -53,6 +53,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     }, [printifyId, success]);
 
     useEffect(() => {
+        console.log('etsy', etsy)
         if (user?.id && provider === "etsy" && success && !etsy) {
             /**
              * Once you store access token in the db add it to app state
