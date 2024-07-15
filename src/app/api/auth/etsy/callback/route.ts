@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteEtsyOAuthState, getEtsyOAuthState, storeEtsyAccessToken } from '@/data/etsy';
+import { deleteEtsyOAuthState, getEtsyAccessTokenByUserId, getEtsyOAuthState, storeEtsyAccessToken } from '@/data/etsy';
 import { auth } from "@/auth";
 import { encryptToken } from '@/lib/jwt';
 
@@ -8,6 +8,11 @@ export async function GET(req: NextRequest) {
   const userId = session?.user?.id;
   if (!userId) {
     return NextResponse.json({ error: 'User is not authenticated!' }, { status: 401 });
+  }
+
+  const currAccessToken = await getEtsyAccessTokenByUserId(userId);
+  if (currAccessToken) {
+    return NextResponse.json({ error: 'You already have an Etsy access token!' }, { status: 400 });
   }
 
   try {
