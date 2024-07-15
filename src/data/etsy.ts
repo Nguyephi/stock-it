@@ -7,7 +7,7 @@ export const handleEtsyOauthByUserId = async () => {
         const response = await fetch('/api/auth/etsy/connect');
         const data = await response.json();
         window.location.href = new URL(data.authorizationUrl).toString();
-        return { success: 'Etsy access granted!' }
+        return { success: 'Connecting to Etsy...' }
     } catch (error) {
         console.error('Error initiating Etsy OAuth:', error);
         return { error: 'Something went wrong!' }
