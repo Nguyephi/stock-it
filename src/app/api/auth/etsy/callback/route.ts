@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
     /**
      * Check if access token fetch was successful
      */
-    console.log("whats wring with token",tokenResponse);
+    console.log("whats wring with token", tokenResponse);
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
       redirectUrl.searchParams.set("error", "Failed to fetch access token");
@@ -87,46 +87,45 @@ export async function GET(req: NextRequest) {
     /**
      * Fetch user data
      */
-    if (accessToken) {
-      const providerAccountId = accessToken.split('.')[0];
-      const userData = await fetch(`https://api.etsy.com/v3/application/users/${providerAccountId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'x-api-key': process.env.AUTH_ETSY_ID!,
-        },
-      });
-      if (!userData.ok) {
-        const errorData = await userData.json();
-        redirectUrl.searchParams.set("error", "Failed to fetch user data");
-        redirectUrl.searchParams.set("provider", "etsy");
-        return NextResponse.redirect(redirectUrl);
-      }
-      const user = await userData.json();
-      const encryptedAccessToken = encryptToken(accessToken);
-      const encryptedRefreshToken = encryptToken(refreshToken);
+    const providerAccountId = accessToken.split('.')[0];
+    const userData = await fetch(`https://api.etsy.com/v3/application/users/${providerAccountId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'x-api-key': process.env.AUTH_ETSY_ID!,
+      },
+    });
+    if (!userData.ok) {
+      const errorData = await userData.json();
+      redirectUrl.searchParams.set("error", "Failed to fetch user data");
+      redirectUrl.searchParams.set("provider", "etsy");
+      return NextResponse.redirect(redirectUrl);
+    }
+    const user = await userData.json();
+    const encryptedAccessToken = encryptToken(accessToken);
+    const encryptedRefreshToken = encryptToken(refreshToken);
 
+    /**
+     * Store access token and delete oauth state
+     */
+    const storedData = await storeEtsyAccessToken(
+      userId,
+      providerAccountId,
+      encryptedAccessToken,
+      encryptedRefreshToken,
+      expiresIn,
+      tokenType
+    );
+    if (storedData) {
+      await deleteEtsyOAuthState(state);
       /**
-       * Store access token and delete oauth state
+       * Return to dashboard with success message
        */
-      const storedData = await storeEtsyAccessToken(
-        userId,
-        providerAccountId,
-        encryptedAccessToken,
-        encryptedRefreshToken,
-        expiresIn,
-        tokenType
-      );
-      if (storedData) {
-        await deleteEtsyOAuthState(state);
-        /**
-         * Return to dashboard with success message
-         */
-        redirectUrl.searchParams.set("success", "Connected to Etsy!");
-        redirectUrl.searchParams.set("provider", "etsy");
-        return NextResponse.redirect(redirectUrl);
-      }
     }
 
+
+    redirectUrl.searchParams.set("success", "Connected to Etsy!");
+    redirectUrl.searchParams.set("provider", "etsy");
+    return NextResponse.redirect(redirectUrl);
   } catch (error) {
     console.error('OAuth Error:', error);
     redirectUrl.searchParams.set("error", "OAuth process failed");
