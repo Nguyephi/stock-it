@@ -20,12 +20,14 @@ const SettingsPage = () => {
     const paramProvider = searchParams.get("provider")
 
     useEffect(() => {
+        console.log('paramError', paramError)
         if (paramError) {
             setError(paramError)
         }
     }, [paramError, setError])
 
     useEffect(() => {
+        console.log('paramProvider', paramProvider)
         if (paramProvider) {
             setProvider(paramProvider)
         }
