@@ -2,6 +2,18 @@ import { db } from "@/lib/db";
 
 export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
 
+export const handleEtsyOauthByUserId = async () => {
+    try {
+        const response = await fetch('/api/auth/etsy/connect');
+        const data = await response.json();
+        window.location.href = new URL(data.authorizationUrl).toString();
+        return { success: 'Etsy access granted!' }
+    } catch (error) {
+        console.error('Error initiating Etsy OAuth:', error);
+        return { error: 'Something went wrong!' }
+    }
+}
+
 export const storeEtsyOauthStateByUserId = async (userId: string, state: string, codeVerifier: string) => {
     const expiresAt = new Date(new Date().getTime() + 3600 * 1000);
     try {
@@ -101,5 +113,26 @@ export const deleteEtsyAccessToken = async (userId: string, providerAccountId: s
         });
     } catch (error) {
         console.error('Error deleting Etsy access token:', error);
+    }
+}
+
+export const isEtsyAccessTokenValid = async (userId: string) => {
+    try {
+        const accountData = await db.account.findFirst({
+            where: {
+                userId,
+                type: 'etsy',
+            },
+        });
+
+        if (!accountData) {
+            return false;
+        }
+
+        const expiryTime = new Date(accountData.createdAt.getTime() + (accountData.expires_at || 3600) * 1000);
+
+        return new Date() > expiryTime;;
+    } catch (error) {
+        console.error('Error checking Etsy access token validity:', error);
     }
 }

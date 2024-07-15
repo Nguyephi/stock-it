@@ -2,11 +2,8 @@ import { useEffect, useTransition } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { FaCheckCircle } from "react-icons/fa";
-import { FiAlertTriangle } from "react-icons/fi";
 
 import { Form, FormControl, FormField, FormItem } from "../atoms/form";
-import { Alert, AlertDescription } from "../atoms/alert";
 import { Button } from "../atoms/button";
 import { Input } from "../atoms/input";
 import { cn } from "@/lib/cn";
@@ -20,6 +17,7 @@ interface InputWithButtonProps {
   onSubmit?: (value: z.infer<typeof InputSchema>) => Promise<{ error?: string; success?: string } | void>;
   inputClassName?: string;
   buttonClassName?: string;
+  provider?: string;
 }
 
 export function InputWithButton({
@@ -30,7 +28,7 @@ export function InputWithButton({
   inputClassName,
   buttonClassName,
 }: InputWithButtonProps) {
-  const { error, success, clearMessages, setError, setSuccess } = useAlertStore();
+  const { clearMessages } = useAlertStore();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof InputSchema>>({
@@ -44,20 +42,8 @@ export function InputWithButton({
     clearMessages();
     startTransition(() => {
       onSubmit && onSubmit(values)
-        .then((data) => {
-          if (!data) return
-          const { error, success } = data
-          if (error) setError(data.error)
-          if (success) setSuccess(data.success)
-        })
     })
   };
-
-  useEffect(() => {
-    return () => {
-      clearMessages();
-    };
-  }, [clearMessages]);
 
   return (
     <Form {...form}>
@@ -88,18 +74,6 @@ export function InputWithButton({
               </FormItem>
             )}
           />
-          {error && <Alert variant="destructive">
-            <div className='flex items-center space-x-2'>
-              <FiAlertTriangle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </div>
-          </Alert>}
-          {success && <Alert variant="affirmative">
-            <div className='flex items-center space-x-2'>
-              <FaCheckCircle className="h-4 w-4" />
-              <AlertDescription>{success}</AlertDescription>
-            </div>
-          </Alert>}
         </div>
       </form>
     </Form >

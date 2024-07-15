@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import * as z from 'zod';
 import { FaCheckCircle, FaTrash } from 'react-icons/fa'
+import { FiAlertTriangle } from "react-icons/fi";
 
 
 import {
@@ -10,6 +11,7 @@ import {
     CardHeader,
     CardFooter
 } from '../atoms/card';
+import { Alert, AlertDescription } from "../atoms/alert";
 import { InputWithButton } from './InputWithButton';
 import { InputSchema } from '@/schema';
 import useAlertStore from '@/store/alert-message';
@@ -31,17 +33,44 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     handleSubmit,
     onClick
 }) => {
-    const { success, clearMessages } = useAlertStore();
+    const { success, clearMessages, provider: alertProvider, error } = useAlertStore();
     const { data: printify, loading: printifyLoading, fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
 
     useEffect(() => {
-        if (success && !printify?.id) {
+        if (provider === "printify" &&success && !printify?.id) {
+            /**
+             * Once you store access token in the db add it to app state
+             *  */ 
             fetchPrintifyData()
         }
         return () => {
             clearMessages();
         };
     }, [printify, success]);
+
+    const renderAlert = () => {
+        if (error) {
+            return (
+                <Alert variant="destructive">
+                    <div className='flex items-center space-x-2'>
+                        <FiAlertTriangle className="h-4 w-4" />
+                        <AlertDescription>{error}</AlertDescription>
+                    </div>
+                </Alert>
+            )
+        }
+        if (success) {
+            return (
+                <Alert variant="affirmative">
+                    <div className='flex items-center space-x-2'>
+                        <FaCheckCircle className="h-4 w-4" />
+                        <AlertDescription>{success}</AlertDescription>
+                    </div>
+                </Alert>
+            )
+        }
+        return null
+    }
 
     const renderPrintifyCard = () => {
         if (!printifyLoading) {
@@ -56,12 +85,16 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
                                 {description}
                             </CardContent>
                         </div>
-                        <CardFooter className='w-full'>
+                        <CardFooter className='w-full flex flex-col space-y-4'>
                             <InputWithButton
                                 inputPlaceholder="Enter your access token"
                                 onSubmit={handleSubmit}
                                 buttonText="Connect"
+                                provider={provider}
                             />
+                            {provider === alertProvider && (
+                                renderAlert()
+                            )}
                         </CardFooter>
                     </Card>
                 )
@@ -95,19 +128,17 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
                         {description}
                     </CardContent>
                 </div>
-                <CardFooter className='w-full'>
+                <CardFooter className='w-full flex flex-col space-y-4'>
                     <Button
                         onClick={onClick}
-                        className='h-12'
+                        className='h-12 w-full'
                         size='lg'
                     >
                         Connect
                     </Button>
-                    {/* <InputWithButton
-                        inputPlaceholder="Enter your access token"
-                        onSubmit={handleSubmit}
-                        buttonText="Connect"
-                    /> */}
+                    {provider === alertProvider && (
+                        renderAlert()
+                    )}
                 </CardFooter>
             </Card>
         )

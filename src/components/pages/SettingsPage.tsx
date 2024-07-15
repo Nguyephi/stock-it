@@ -1,16 +1,25 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import useUserStore from '@/store/user';
 import DashboardLayout from '../templates/DashboardLayout';
 import { storePrintifyAccessToken } from '@/actions/printify/access-token';
 import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
-import { handleEtsyOauth } from '@/actions/etsy/access-token';
+import { handleEtsyOauthByUserId } from '@/data/etsy';
+import useAlertStore from '@/store/alert-message';
 
 const SettingsPage = () => {
     const { data: user } = useUserStore();
+    const { clearMessages, setError, setSuccess, setProvider } = useAlertStore();
+
+    useEffect(() => {
+        return () => {
+            clearMessages();
+        };
+    }, [clearMessages]);
+
     return (
         <DashboardLayout>
             <Title className='text-left w-full px-8 pt-8 pb-4'>Settings</Title>
@@ -20,14 +29,22 @@ const SettingsPage = () => {
                     provider="printify"
                     headerLabel="Connect your printify"
                     description="Grab your personal access token from printify and paste it here."
-                    handleSubmit={(values) => storePrintifyAccessToken(values)}
+                    handleSubmit={(values) => storePrintifyAccessToken(values)
+                        .then((data) => {
+                            if (!data) return
+                            const { error, success } = data
+                            if (error) setError(data.error)
+                            if (success) setSuccess(data.success)
+                            setProvider("printify")
+                        })
+                    }
                 >
                 </ShopConnectCard>
                 <ShopConnectCard
                     provider="etsy"
                     headerLabel="Connect your etsy"
                     description="Using oAuth2"
-                    onClick={handleEtsyOauth}
+                    onClick={() => handleEtsyOauthByUserId()}
                 >
                 </ShopConnectCard>
             </div>
