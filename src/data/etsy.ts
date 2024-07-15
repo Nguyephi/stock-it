@@ -41,6 +41,7 @@ export const storeEtsyOauthStateByUserId = async (userId: string, state: string,
 }
 
 export const getEtsyOAuthStateByUserId = async (userId: string) => {
+    // TODO: check if expired
     try {
         const stateData = await db.etsyOAuthState.findUnique({ where: { userId } });
         return stateData;

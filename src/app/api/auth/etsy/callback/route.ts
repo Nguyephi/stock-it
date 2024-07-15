@@ -68,6 +68,7 @@ export async function GET(req: NextRequest) {
     /**
      * Check if access token fetch was successful
      */
+    console.log("whats wring with token",tokenResponse);
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
       redirectUrl.searchParams.set("error", "Failed to fetch access token");
