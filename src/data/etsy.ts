@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 
 export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
 
-export const handleEtsyOauthByUserId = async () => {
+export const handleEtsyOauth = async () => {
     try {
         const response = await fetch('/api/auth/etsy/connect');
         const data = await response.json();
@@ -101,7 +101,7 @@ export const getEtsyAccessTokenByUserId = async (userId: string) => {
     }
 }
 
-export const deleteEtsyAccessToken = async (userId: string, providerAccountId: string) => {
+export const deleteEtsyAccessTokenProviderAccountId = async (userId: string, providerAccountId: string) => {
     try {
         await db.account.delete({
             where:{

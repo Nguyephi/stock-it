@@ -7,7 +7,7 @@ import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
 import DashboardLayout from '../templates/DashboardLayout';
-import { handleEtsyOauthByUserId } from '@/data/etsy';
+import { handleEtsyOauth } from '@/data/etsy';
 import { storePrintifyAccessToken } from '@/actions/printify/access-token';
 import useUserStore from '@/store/user';
 import useAlertStore from '@/store/alert-message';
@@ -64,7 +64,7 @@ const SettingsPage = () => {
                     provider="etsy"
                     headerLabel="Connect your etsy"
                     description="Using oAuth2"
-                    onClick={() => handleEtsyOauthByUserId()
+                    onClick={() => handleEtsyOauth()
                         .then((data) => {
                             if (!data) return
                             const { error, success } = data
