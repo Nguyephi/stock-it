@@ -117,15 +117,15 @@ export async function GET(req: NextRequest) {
       );
       if (storedData) {
         await deleteEtsyOAuthState(state);
+        /**
+         * Return to dashboard with success message
+         */
+        redirectUrl.searchParams.set("success", "Connected to Etsy!");
+        redirectUrl.searchParams.set("provider", "etsy");
+        return NextResponse.redirect(redirectUrl);
       }
     }
 
-    /**
-     * Return to dashboard with success message
-     */
-    redirectUrl.searchParams.set("success", "Connected to Etsy!");
-    redirectUrl.searchParams.set("provider", "etsy");
-    return NextResponse.redirect(redirectUrl);
   } catch (error) {
     console.error('OAuth Error:', error);
     redirectUrl.searchParams.set("error", "OAuth process failed");
