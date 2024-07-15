@@ -17,6 +17,8 @@ import { InputSchema } from '@/schema';
 import useAlertStore from '@/store/alert-message';
 import usePrintifyStore, { selectPrintifyId, selectPrintifyLoading } from '@/store/printify';
 import { Button } from '../atoms/button';
+import useEtsyStore, { selectEtsyData } from '@/store/etsy';
+import useUserStore from '@/store/user';
 
 interface ShopConnectCardProps {
     provider?: string;
@@ -33,10 +35,13 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     handleSubmit,
     onClick
 }) => {
-    const { success, clearMessages, provider: alertProvider, error } = useAlertStore();
+    const {data: user} = useUserStore();
+    const { success, error, provider: alertProvider } = useAlertStore();
     const printifyId = usePrintifyStore(selectPrintifyId);
     const printifyLoading = usePrintifyStore(selectPrintifyLoading);
     const { fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
+    const { fetchData: fetchEtsyData } = useEtsyStore();
+    const etsy = useEtsyStore(selectEtsyData);
 
     useEffect(() => {
         if (provider === "printify" && success && !printifyId) {
@@ -45,10 +50,22 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
              *  */
             fetchPrintifyData()
         }
-        // return () => {
-        //     clearMessages();
-        // };
     }, [printifyId, success]);
+
+    useEffect(() => {
+        if (user?.id && provider === "etsy" && success && !etsy) {
+            /**
+             * Once you store access token in the db add it to app state
+             *  */
+            fetchEtsyData(user?.id)
+        }
+    }, [etsy, success]);
+
+    useEffect(() => {
+        if (etsy) {
+            console.log('etsy', etsy)
+        }
+    }, [etsy]);
 
     const renderAlert = () => {
         if (error) {
@@ -69,6 +86,25 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
                         <AlertDescription>{success}</AlertDescription>
                     </div>
                 </Alert>
+            )
+        }
+        return null
+    }
+
+    const renderConnectedProviderCard = (onClick?: () => void) => {
+        if (printifyId) {
+            return (
+                <Card className="flex flex-col space-y-0 justify-between">
+                    <CardHeader className="flex flex-row justify-between items-center">
+                        <CardTitle className="flex items-center text-2xl text-green-600">
+                            <FaCheckCircle className='mr-2' />
+                            Connected to {provider}!
+                        </CardTitle>
+                        <Button variant="ghost" size="icon" className=" text-red-600" onClick={onClick}>
+                            <FaTrash className='text-2xl' />
+                        </Button>
+                    </CardHeader>
+                </Card>
             )
         }
         return null
@@ -101,20 +137,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
                     </Card>
                 )
             }
-
-            return (
-                <Card className="flex flex-col space-y-0 justify-between">
-                    <CardHeader className="flex flex-row justify-between items-center">
-                        <CardTitle className="flex items-center text-2xl text-green-600">
-                            <FaCheckCircle className='mr-2' />
-                            Connected to printify!
-                        </CardTitle>
-                        <Button variant="ghost" size="icon" className=" text-red-600" onClick={deletePrintifyData}>
-                            <FaTrash className='text-2xl' />
-                        </Button>
-                    </CardHeader>
-                </Card>
-            )
+            return renderConnectedProviderCard(deletePrintifyData)
         }
         // TODO: render card template for when its loading, create a separate component for this to use with etsy card
     }
