@@ -115,6 +115,8 @@ export async function GET(req: NextRequest) {
       expiresIn,
       tokenType
     );
+
+    console.log("storedData", storedData);
     if (storedData) {
       await deleteEtsyOAuthState(state);
       /**
