@@ -100,7 +100,7 @@ model EtsyOAuthState {
   id           String   @id @default(uuid())
   state        String   @unique
   codeVerifier String
-  userId       String
+  userId       String   @unique
   createdAt    DateTime @default(now())
   expiresAt    DateTime
 

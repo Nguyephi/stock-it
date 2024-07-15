@@ -21,8 +21,14 @@ export const handleEtsyOauth = async () => {
 export const storeEtsyOauthStateByUserId = async (userId: string, state: string, codeVerifier: string) => {
     const expiresAt = new Date(new Date().getTime() + 3600 * 1000);
     try {
-        await db.etsyOAuthState.create({
-            data: {
+        await db.etsyOAuthState.upsert({
+            where: { userId },
+            update: {
+                state,
+                codeVerifier,
+                expiresAt,
+            },
+            create: {
                 userId,
                 state,
                 codeVerifier,
@@ -36,7 +42,7 @@ export const storeEtsyOauthStateByUserId = async (userId: string, state: string,
 
 export const getEtsyOAuthStateByUserId = async (userId: string) => {
     try {
-        const stateData = await db.etsyOAuthState.findFirst({ where: { userId } });
+        const stateData = await db.etsyOAuthState.findUnique({ where: { userId } });
         return stateData;
     } catch {
         return null;
