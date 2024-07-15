@@ -143,9 +143,7 @@ export const deletePrintifyData = async () => {
     }
 
     try {
-        const printify = await db.printify.findUnique({
-            where: { userId: userId },
-        });
+        const printify = await getPrintifyDataByUserId(userId);
 
         if (!printify) {
             return { error: 'No access token found' };

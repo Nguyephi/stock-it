@@ -17,8 +17,7 @@ import { InputSchema } from '@/schema';
 import useAlertStore from '@/store/alert-message';
 import usePrintifyStore, { selectPrintifyId, selectPrintifyLoading } from '@/store/printify';
 import { Button } from '../atoms/button';
-import useEtsyStore, { selectEtsyData } from '@/store/etsy';
-import useUserStore from '@/store/user';
+import useEtsyStore, { selectEtsyId, selectEtsyLoading } from '@/store/etsy';
 
 interface ShopConnectCardProps {
     provider?: string;
@@ -35,36 +34,37 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     handleSubmit,
     onClick
 }) => {
-    const { success, error, provider: alertProvider } = useAlertStore();
+    const { success, error, provider: alertProvider, clearMessages } = useAlertStore();
     const printifyId = usePrintifyStore(selectPrintifyId);
     const printifyLoading = usePrintifyStore(selectPrintifyLoading);
     const { fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
-    const { fetchData: fetchEtsyData } = useEtsyStore();
-    const etsy = useEtsyStore(selectEtsyData);
+    const { fetchData: fetchEtsyData, deleteData: deleteEtsyData } = useEtsyStore();
+    const etsyId = useEtsyStore(selectEtsyId);
+    const etsyLoading = useEtsyStore(selectEtsyLoading);
 
     useEffect(() => {
         if (provider === "printify" && !printifyId && success) {
             /**
              * Once you store access token in the db add it to app state
              *  */
-            fetchPrintifyData()
+            fetchPrintifyData();
+        }
+        return () => {
+            clearMessages()
         }
     }, [printifyId, success]);
 
     useEffect(() => {
-        if (provider === "etsy" && !etsy && success) {
+        if (provider === "etsy" && !etsyId && success) {
             /**
              * Once you store access token in the db add it to app state
              *  */
             fetchEtsyData();
         }
-    }, [etsy, success]);
-
-    useEffect(() => {
-        if (etsy) {
-            console.log('etsy', etsy)
+        return () => {
+            clearMessages()
         }
-    }, [etsy]);
+    }, [etsyId, success]);
 
     const renderAlert = () => {
         if (error) {
@@ -91,22 +91,19 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     }
 
     const renderConnectedProviderCard = (onClick?: () => void) => {
-        if (printifyId) {
-            return (
-                <Card className="flex flex-col space-y-0 justify-between">
-                    <CardHeader className="flex flex-row justify-between items-center">
-                        <CardTitle className="flex items-center text-2xl text-green-600">
-                            <FaCheckCircle className='mr-2' />
-                            Connected to {provider}!
-                        </CardTitle>
-                        <Button variant="ghost" size="icon" className=" text-red-600" onClick={onClick}>
-                            <FaTrash className='text-2xl' />
-                        </Button>
-                    </CardHeader>
-                </Card>
-            )
-        }
-        return null
+        return (
+            <Card className="flex flex-col space-y-0 justify-between">
+                <CardHeader className="flex flex-row justify-between items-center">
+                    <CardTitle className="flex items-center text-2xl text-green-600">
+                        <FaCheckCircle className='mr-2' />
+                        Connected to {provider}!
+                    </CardTitle>
+                    <Button variant="ghost" size="icon" className=" text-red-600" onClick={onClick}>
+                        <FaTrash className='text-2xl' />
+                    </Button>
+                </CardHeader>
+            </Card>
+        )
     }
 
     const renderPrintifyCard = () => {
@@ -142,30 +139,35 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     }
 
     const renderEtsyCard = () => {
-        return (
-            <Card className="flex flex-col space-y-0 py-2 justify-between">
-                <div className="flex flex-col">
-                    <CardHeader className="flex flex-col space-y-2">
-                        <CardTitle className="text-2xl">{headerLabel}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {description}
-                    </CardContent>
-                </div>
-                <CardFooter className='w-full flex flex-col space-y-4'>
-                    <Button
-                        onClick={onClick}
-                        className='h-12 w-full'
-                        size='lg'
-                    >
-                        Connect
-                    </Button>
-                    {provider === alertProvider && (
-                        renderAlert()
-                    )}
-                </CardFooter>
-            </Card>
-        )
+        if (!etsyLoading) {
+            if (!etsyId) {
+                return (
+                    <Card className="flex flex-col space-y-0 py-2 justify-between">
+                        <div className="flex flex-col">
+                            <CardHeader className="flex flex-col space-y-2">
+                                <CardTitle className="text-2xl">{headerLabel}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {description}
+                            </CardContent>
+                        </div>
+                        <CardFooter className='w-full flex flex-col space-y-4'>
+                            <Button
+                                onClick={onClick}
+                                className='h-12 w-full'
+                                size='lg'
+                            >
+                                Connect
+                            </Button>
+                            {provider === alertProvider && (
+                                renderAlert()
+                            )}
+                        </CardFooter>
+                    </Card>
+                )
+            }
+            return renderConnectedProviderCard(deleteEtsyData)
+        }
     }
 
     return (

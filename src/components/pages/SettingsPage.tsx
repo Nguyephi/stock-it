@@ -9,11 +9,9 @@ import Divider from '../atoms/Divider';
 import DashboardLayout from '../templates/DashboardLayout';
 import { handleEtsyOauth } from '@/data/etsy';
 import { storePrintifyAccessToken } from '@/actions/printify/access-token';
-import useUserStore from '@/store/user';
 import useAlertStore from '@/store/alert-message';
 
 const SettingsPage = () => {
-    const { data: user } = useUserStore();
     const { clearMessages, setError, setSuccess, setProvider } = useAlertStore();
     const searchParams = useSearchParams();
     const paramError = searchParams.get("error")
