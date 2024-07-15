@@ -30,9 +30,9 @@ export const storeEtsyOauthStateByUserId = async (userId: string, state: string,
     }
 }
 
-export const getEtsyOAuthState = async (state: string) => {
+export const getEtsyOAuthStateByUserId = async (userId: string) => {
     try {
-        const stateData = await db.etsyOAuthState.findUnique({ where: { state } });
+        const stateData = await db.etsyOAuthState.findFirst({ where: { userId } });
         return stateData;
     } catch {
         return null;

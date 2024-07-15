@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { deleteEtsyOAuthState, getEtsyOAuthState, scopes, storeEtsyOauthStateByUserId } from '@/data/etsy';
+import { deleteEtsyOAuthState, getEtsyOAuthStateByUserId, scopes, storeEtsyOauthStateByUserId } from '@/data/etsy';
 import { NextRequest, NextResponse } from 'next/server';
 import { encode } from 'querystring';
 
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'User is not authenticated!' }, { status: 401 });
   }
   try {
-    const prevState = await getEtsyOAuthState(state)
+    const prevState = await getEtsyOAuthStateByUserId(userId)
     if (prevState) {
       await deleteEtsyOAuthState(state);
     }
