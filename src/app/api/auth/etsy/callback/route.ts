@@ -68,7 +68,6 @@ export async function GET(req: NextRequest) {
     /**
      * Check if access token fetch was successful
      */
-    console.log("whats wring with token", tokenResponse);
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
       redirectUrl.searchParams.set("error", "Failed to fetch access token");
@@ -85,7 +84,7 @@ export async function GET(req: NextRequest) {
     } = tokenData;
 
     /**
-     * Fetch user data
+     * Fetch user data and delete oauth state
      */
     const providerAccountId = accessToken.split('.')[0];
     const userData = await fetch(`https://api.etsy.com/v3/application/users/${providerAccountId}`, {
@@ -94,6 +93,7 @@ export async function GET(req: NextRequest) {
         'x-api-key': process.env.AUTH_ETSY_ID!,
       },
     });
+    await deleteEtsyOAuthState(state);
     if (!userData.ok) {
       const errorData = await userData.json();
       redirectUrl.searchParams.set("error", "Failed to fetch user data");
@@ -105,7 +105,7 @@ export async function GET(req: NextRequest) {
     const encryptedRefreshToken = encryptToken(refreshToken);
 
     /**
-     * Store access token and delete oauth state
+     * Store access token
      */
     await storeEtsyAccessToken(
       userId,
@@ -116,7 +116,6 @@ export async function GET(req: NextRequest) {
       tokenType
     );
 
-    await deleteEtsyOAuthState(state);
     redirectUrl.searchParams.set("success", "Connected to Etsy!");
     redirectUrl.searchParams.set("provider", "etsy");
     return NextResponse.redirect(redirectUrl);
