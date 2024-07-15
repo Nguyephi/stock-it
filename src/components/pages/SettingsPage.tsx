@@ -17,17 +17,22 @@ const SettingsPage = () => {
     const { clearMessages, setError, setSuccess, setProvider } = useAlertStore();
     const searchParams = useSearchParams();
     const paramError = searchParams.get("error")
+    const paramSuccess = searchParams.get("success")
     const paramProvider = searchParams.get("provider")
 
     useEffect(() => {
-        console.log('paramError', paramError)
         if (paramError) {
             setError(paramError)
         }
     }, [paramError, setError])
 
     useEffect(() => {
-        console.log('paramProvider', paramProvider)
+        if (paramSuccess) {
+            setSuccess(paramSuccess)
+        }
+    }, [paramSuccess, setSuccess])
+
+    useEffect(() => {
         if (paramProvider) {
             setProvider(paramProvider)
         }
@@ -67,10 +72,9 @@ const SettingsPage = () => {
                     onClick={() => handleEtsyOauth()
                         .then((data) => {
                             if (!data) return
-                            const { error, success } = data
+                            const { error } = data
                             console.log("etsy data", data)
                             if (error) setError(data.error)
-                            if (success) setSuccess(data.success)
                             setProvider("etsy")
                         })
                     }
