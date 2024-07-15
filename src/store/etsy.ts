@@ -28,6 +28,7 @@ const useEtsyStore = create<EtsyState>((set) => ({
         set((state) => ({ ...state, loading: true, error: null }));
         try {
             const data = await getEtsyAccessTokenByUserId(userId);
+            console.log("fetchdata", data)
             set((state) => ({ ...state, loading: false, data }));
         } catch (error) {
             set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
