@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
   if (currAccessToken) {
     const redirectUrl = new URL('/dashboard/settings', req.url);
     redirectUrl.searchParams.set("error" , "You already have an Etsy access token!");
+    redirectUrl.searchParams.set("provider" , "etsy");
     return NextResponse.redirect(redirectUrl);
   }
 

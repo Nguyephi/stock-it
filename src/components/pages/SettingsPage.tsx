@@ -16,6 +16,20 @@ const SettingsPage = () => {
     const { data: user } = useUserStore();
     const { clearMessages, setError, setSuccess, setProvider } = useAlertStore();
     const searchParams = useSearchParams();
+    const paramError = searchParams.get("error")
+    const paramProvider = searchParams.get("provider")
+
+    useEffect(() => {
+        if (paramError) {
+            setError(paramError)
+        }
+    }, [paramError])
+
+    useEffect(() => {
+        if (paramProvider) {
+            setProvider(paramProvider)
+        }
+    }, [paramProvider])
 
     useEffect(() => {
         return () => {
@@ -53,11 +67,6 @@ const SettingsPage = () => {
                             const { error, success } = data
                             if (error) setError(data.error)
                             if (success) setSuccess(data.success)
-                            const paramError = searchParams.get("error")
-                            console.log('error', paramError)
-                            if (paramError) {
-                                setError(paramError)
-                            }
                             setProvider("etsy")
                         })
                     }
