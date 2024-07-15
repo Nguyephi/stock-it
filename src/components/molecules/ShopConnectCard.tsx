@@ -37,10 +37,10 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     const { data: printify, loading: printifyLoading, fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
 
     useEffect(() => {
-        if (provider === "printify" &&success && !printify?.id) {
+        if (provider === "printify" && success && !printify?.id) {
             /**
              * Once you store access token in the db add it to app state
-             *  */ 
+             *  */
             fetchPrintifyData()
         }
         return () => {
