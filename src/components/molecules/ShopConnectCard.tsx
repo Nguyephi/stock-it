@@ -57,7 +57,6 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
 
     useEffect(() => {
         if (provider === "etsy" && !etsyId && success && provider === alertProvider) {
-            console.log("fetching etsy data")
             /**
              * Once you store access token in the db add it to app state
              *  */
