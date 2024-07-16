@@ -23,6 +23,6 @@ export const getPrintifyShopIdByUserId = async (userId: string) => {
         const data = await db.printify.findUnique({ where: { userId }});
         return data?.shopId;
     } catch {
-        return "";
+        return null;
     }
 }

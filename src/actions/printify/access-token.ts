@@ -81,7 +81,7 @@ export const storePrintifyAccessToken = async (values: z.infer<typeof InputSchem
  * @param id 
  * @returns 
  */
-export const fetchPrintifyProductsByShopId = async (token: string, id: string) => {
+export const fetchPrintifyProductsByShopId = async (token: string, id: number) => {
     const response = await fetch(`${PRINTIFY_API_URL}/shops/${id}/products.json`, {
         method: 'GET',
         headers: {
