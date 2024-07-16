@@ -121,9 +121,9 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
                                 buttonText="Connect"
                                 provider={provider}
                             />
-                                {renderAlert()}
-                            {/* {provider === alertProvider && (
-                            )} */}
+                            {provider === alertProvider && (
+                                renderAlert()
+                            )}
                         </CardFooter>
                     </Card>
                 )
