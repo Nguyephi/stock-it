@@ -89,8 +89,9 @@ model PasswordResetToken {
 model Printify {
   id           String   @id @default(cuid())
   userId       String   @unique
-  accessToken  String   @db.Text
-  refreshToken String
+  shopId       String
+  accessToken  String   
+  refreshToken String    
   expiresAt    DateTime 
   storeData    Json?     
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
