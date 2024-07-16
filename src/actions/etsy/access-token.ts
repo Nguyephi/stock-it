@@ -1,7 +1,7 @@
 "use server"
 
 import { auth } from "@/auth";
-import { getEtsyAccessTokenByUserId } from "@/data/etsy";
+import { getEtsyAccessTokenByUserId, getEtsyDataByUserId } from "@/data/etsy";
 import { db } from "@/lib/db";
 
 export const getEtsyToken = async () => {
@@ -22,7 +22,7 @@ export const getEtsyToken = async () => {
     }
 }
 
-export const deleteEtsyToken = async () => {
+export const deleteEtsyData = async () => {
     const session = await auth();
     const userId = session?.user?.id;
     if (!userId) {
@@ -30,7 +30,7 @@ export const deleteEtsyToken = async () => {
     }
 
     try {
-        const etsy = await getEtsyAccessTokenByUserId(userId);
+        const etsy = await getEtsyDataByUserId(userId);
 
         if (!etsy) {
             return { error: 'No access token found' };

@@ -1,19 +1,21 @@
 import { create } from 'zustand';
 
-import { deletePrintifyData, getPrintifyData } from '@/actions/printify/access-token';
+import { deletePrintifyData, getPrintifyToken } from '@/actions/printify/access-token';
 
 interface PrintifyState {
+    token: string | undefined;
     data: any;
     loading: boolean;
     error: string | null;
     fetchDataStart: () => void;
     fetchDataSuccess: (data: any) => void;
     fetchDataFailure: (error: string) => void;
-    fetchData: () => void;
+    fetchToken: () => void;
     deleteData: () => void;
 }
 
 const initialState = {
+    token: undefined,
     data: null,
     loading: true,
     error: null,
@@ -24,12 +26,16 @@ const usePrintifyStore = create<PrintifyState>((set) => ({
     fetchDataStart: () => set((state) => ({ ...state, loading: true, error: null })),
     fetchDataSuccess: (data) => set((state) => ({ ...state, loading: false, data })),
     fetchDataFailure: (error) => set((state) => ({ ...state, loading: false, error })),
-    fetchData: async () => {
+    fetchToken: async () => {
         set((state) => ({ ...state, loading: true, error: null }));
         try {
             // TODO: maybe separate prinitdy data into a different model (schema model: printify.storeData -> printifyData)
-            const data = await getPrintifyData();
-            set((state) => ({ ...state, loading: false, data }));
+            const token = await getPrintifyToken();
+            if (typeof token !== "string") {
+                set((state) => ({ ...state, loading: false, error: token?.error }));
+                return;
+            }
+            set((state) => ({ ...state, loading: false, token }));
         } catch (error) {
             set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
         }
@@ -45,8 +51,8 @@ const usePrintifyStore = create<PrintifyState>((set) => ({
     }
 }));
 
+export const selectPrintifyToken = (state: PrintifyState) => state.token;
 export const selectPrintifyData = (state: PrintifyState) => state.data;
-export const selectPrintifyId = (state: PrintifyState) => state.data?.id;
 export const selectPrintifyLoading = (state: PrintifyState) => state.loading;
 export const selectPrintifyError = (state: PrintifyState) => state.error;
 

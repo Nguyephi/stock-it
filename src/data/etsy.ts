@@ -107,7 +107,7 @@ export const storeEtsyAccessToken = async (
     }
 }
 
-export const isEtsyAccessTokenValid = async (createdAt: Date, expiresAt: number | null) => {
+export const isEtsyAccessTokenExpired = async (createdAt: Date, expiresAt: number | null) => {
     try {
         const expiryTime = new Date(createdAt.getTime() + (expiresAt || 3600) * 1000);
         return new Date() > expiryTime;;
@@ -128,7 +128,30 @@ export const getEtsyAccessTokenByUserId = async (userId: string) => {
         if (!accountData) {
             throw new Error('No access token found');
         }
-        const isTokenValidated = await isEtsyAccessTokenValid(accountData.createdAt, accountData.expires_at);
+        const isTokenValidated = await isEtsyAccessTokenExpired(accountData.createdAt, accountData.expires_at);
+
+        if (!isTokenValidated) {
+            // TODO: refresh token
+        }
+        return accountData.access_token;
+    } catch (error) {
+        console.error('Error fetching Etsy access token:', error);
+    }
+}
+
+export const getEtsyDataByUserId = async (userId: string) => {
+    try {
+        const accountData = await db.account.findFirst({
+            where: {
+                userId,
+                type: 'etsy',
+            },
+        });
+
+        if (!accountData) {
+            throw new Error('No access token found');
+        }
+        const isTokenValidated = await isEtsyAccessTokenExpired(accountData.createdAt, accountData.expires_at);
 
         if (!isTokenValidated) {
             // TODO: refresh token

@@ -15,9 +15,9 @@ import { Alert, AlertDescription } from "../atoms/alert";
 import { InputWithButton } from './InputWithButton';
 import { InputSchema } from '@/schema';
 import useAlertStore from '@/store/alert-message';
-import usePrintifyStore, { selectPrintifyId, selectPrintifyLoading } from '@/store/printify';
+import usePrintifyStore, { selectPrintifyLoading, selectPrintifyToken } from '@/store/printify';
 import { Button } from '../atoms/button';
-import useEtsyStore, { selectEtsyId, selectEtsyLoading } from '@/store/etsy';
+import useEtsyStore, { selectEtsyLoading, selectEtsyToken } from '@/store/etsy';
 import ShopConnectCardTemplate from '../templates/ShopConnectCardTemplate';
 
 interface ShopConnectCardProps {
@@ -36,36 +36,36 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
     onClick
 }) => {
     const { success, error, provider: alertProvider, clearMessages } = useAlertStore();
-    const printifyId = usePrintifyStore(selectPrintifyId);
+    const { fetchToken: fetchPrintifyToken, deleteData: deletePrintifyData } = usePrintifyStore();
+    const printifyToken = usePrintifyStore(selectPrintifyToken);
     const printifyLoading = usePrintifyStore(selectPrintifyLoading);
-    const { fetchData: fetchPrintifyData, deleteData: deletePrintifyData } = usePrintifyStore();
-    const { fetchData: fetchEtsyData, deleteData: deleteEtsyData } = useEtsyStore();
-    const etsyId = useEtsyStore(selectEtsyId);
+    const { fetchToken: fetchEtsyToken, deleteData: deleteEtsyData } = useEtsyStore();
+    const etsyToken = useEtsyStore(selectEtsyToken);
     const etsyLoading = useEtsyStore(selectEtsyLoading);
 
     useEffect(() => {
-        if (provider === "printify" && !printifyId && success && provider === alertProvider) {
+        if (provider === "printify" && !printifyToken && success && provider === alertProvider) {
             /**
              * Once you store access token in the db add it to app state
              *  */
-            fetchPrintifyData();
+            fetchPrintifyToken();
         }
         return () => {
             clearMessages()
         }
-    }, [printifyId, success, provider, alertProvider]);
+    }, [printifyToken, success, provider, alertProvider]);
 
     useEffect(() => {
-        if (provider === "etsy" && !etsyId && success && provider === alertProvider) {
+        if (provider === "etsy" && !etsyToken && success && provider === alertProvider) {
             /**
              * Once you store access token in the db add it to app state
              *  */
-            fetchEtsyData();
+            fetchEtsyToken();
         }
         return () => {
             clearMessages()
         }
-    }, [etsyId, success, provider, alertProvider]);
+    }, [etsyToken, success, provider, alertProvider]);
 
     const renderAlert = () => {
         if (error) {
@@ -109,7 +109,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
 
     const renderPrintifyCard = () => {
         if (!printifyLoading) {
-            if (!printifyId) {
+            if (!printifyToken) {
                 return (
                     <Card className="flex flex-col space-y-0 py-2 justify-between">
                         <div className="flex flex-col">
@@ -141,7 +141,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
 
     const renderEtsyCard = () => {
         if (!etsyLoading) {
-            if (!etsyId) {
+            if (!etsyToken) {
                 return (
                     <Card className="flex flex-col space-y-0 py-2 justify-between">
                         <div className="flex flex-col">

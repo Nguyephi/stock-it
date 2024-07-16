@@ -5,11 +5,16 @@ import { InputSchema } from "@/schema";
 import { auth } from "@/auth";
 import { decryptToken, encryptToken } from "@/lib/jwt";
 import { db } from "@/lib/db";
-import { getPrintifyDataByUserId } from "@/data/printify";
+import { getPrintifyAcessTokenByUserId, getPrintifyShopIdByUserId } from "@/data/printify";
 
 const PRINTIFY_API_URL = "https://api.printify.com/v1"
 
-export const fetchPrintifyStoreDataByToken = async (token: string) => {
+/**
+ * Get printify access token with personal access token
+ * @param token 
+ * @returns 
+ */
+export const fetchPrintifyAccessTokenByPAT = async (token: string) => {
     const response = await fetch(`${PRINTIFY_API_URL}/shops.json`, {
         method: 'GET',
         headers: {
@@ -24,6 +29,11 @@ export const fetchPrintifyStoreDataByToken = async (token: string) => {
     return data;
 }
 
+/**
+ * Makes a request to the Printify API to get the access token and shop id
+ * @param values 
+ * @returns 
+ */
 export const storePrintifyAccessToken = async (values: z.infer<typeof InputSchema>) => {
     const session = await auth();
     const userId = session?.user?.id;
@@ -40,20 +50,22 @@ export const storePrintifyAccessToken = async (values: z.infer<typeof InputSchem
     const { input: token } = validatedFields.data;
 
     try {
-        const printifyStore = await fetchPrintifyStoreDataByToken(token)
+        const printifyStore = await fetchPrintifyAccessTokenByPAT(token)
         if (!printifyStore) {
             return { error: "Invalid access token!" }
         }
+        const shopId = printifyStore[0].id;
         const encryptedToken = encryptToken(token);
 
         await db.printify.upsert({
             where: { userId },
             update: { accessToken: encryptedToken },
             create: {
-                userId: userId,
+                userId,
                 accessToken: encryptedToken,
                 refreshToken: '',
                 expiresAt: new Date(),
+                shopId
             },
         });
         return { success: "Access token validated!" }
@@ -63,6 +75,12 @@ export const storePrintifyAccessToken = async (values: z.infer<typeof InputSchem
     }
 }
 
+/**
+ * Use access token and shopId to fetch products from Printify API
+ * @param token 
+ * @param id 
+ * @returns 
+ */
 export const fetchPrintifyProductsByShopId = async (token: string, id: string) => {
     const response = await fetch(`${PRINTIFY_API_URL}/shops/${id}/products.json`, {
         method: 'GET',
@@ -78,6 +96,10 @@ export const fetchPrintifyProductsByShopId = async (token: string, id: string) =
     return data;
 }
 
+/**
+ * Makes a request to the Printify API to get the products and stores product data in the database
+ * @returns 
+ */
 export const storePrintifyProductsByUserId = async () => {
     const session = await auth();
     const userId = session?.user?.id;
@@ -86,29 +108,25 @@ export const storePrintifyProductsByUserId = async () => {
     }
 
     try {
-        const printify = await getPrintifyDataByUserId(userId);
-        if (!printify) {
+        const token = await getPrintifyAcessTokenByUserId(userId);
+        if (!token) {
             return { error: 'No access token found' };
         }
 
-        const decryptedToken = decryptToken(printify.accessToken);
+        const decryptedToken = decryptToken(token);
 
         if (!decryptedToken) {
             return { error: "Invalid access token!" }
         }
-        let storeData = await fetchPrintifyStoreDataByToken(decryptedToken)
-
-        if (!storeData) {
-            return { error: "Invalid access token!" }
+        let shopId = await getPrintifyShopIdByUserId(userId);
+        if (!shopId) {
+            return { error: 'No shop id found' };
         }
-        storeData = storeData[0];
-        const shopId = storeData.id;
         const products = await fetchPrintifyProductsByShopId(decryptedToken, shopId);
-        storeData.productData = products.data
 
         const updatePrintify = await db.printify.update({
             where: { userId: userId },
-            data: { storeData: storeData },
+            data: { storeData: products.data },
         });
         return { success: "Product data updated!", printify: updatePrintify }
     } catch (error) {
@@ -117,7 +135,11 @@ export const storePrintifyProductsByUserId = async () => {
     }
 }
 
-export const getPrintifyData = async () => {
+/***************************************
+ * Use these functions to interact with printify store
+ ***************************************/
+
+export const getPrintifyToken = async () => {
     const session = await auth();
     const userId = session?.user?.id;
     if (!userId) {
@@ -125,11 +147,11 @@ export const getPrintifyData = async () => {
     }
 
     try {
-        const printify = await getPrintifyDataByUserId(userId);
-        if (!printify) {
+        const token = await getPrintifyAcessTokenByUserId(userId);
+        if (!token) {
             return { error: 'No access token found' };
         }
-        return printify;
+        return token;
     } catch {
         return null;
     }
@@ -143,7 +165,7 @@ export const deletePrintifyData = async () => {
     }
 
     try {
-        const printify = await getPrintifyDataByUserId(userId);
+        const printify = await getPrintifyAcessTokenByUserId(userId);
 
         if (!printify) {
             return { error: 'No access token found' };
