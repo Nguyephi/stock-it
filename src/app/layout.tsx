@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "@/styles/globals.css";
+import 'react-loading-skeleton/dist/skeleton.css';
 import { inter } from "@/lib/fonts"
 import { NextAuthProvider } from "@/providers/next-auth-provider";
 

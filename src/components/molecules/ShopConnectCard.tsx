@@ -18,6 +18,7 @@ import useAlertStore from '@/store/alert-message';
 import usePrintifyStore, { selectPrintifyId, selectPrintifyLoading } from '@/store/printify';
 import { Button } from '../atoms/button';
 import useEtsyStore, { selectEtsyId, selectEtsyLoading } from '@/store/etsy';
+import ShopConnectCardTemplate from '../templates/ShopConnectCardTemplate';
 
 interface ShopConnectCardProps {
     provider?: string;
@@ -135,7 +136,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
             }
             return renderConnectedProviderCard(deletePrintifyData)
         }
-        // TODO: render card template for when its loading, create a separate component for this to use with etsy card
+        return <ShopConnectCardTemplate />
     }
 
     const renderEtsyCard = () => {
@@ -168,6 +169,7 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
             }
             return renderConnectedProviderCard(deleteEtsyData)
         }
+        return <ShopConnectCardTemplate />
     }
 
     return (
