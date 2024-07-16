@@ -50,9 +50,6 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
              *  */
             fetchPrintifyToken();
         }
-        return () => {
-            clearMessages()
-        }
     }, [printifyToken, success, provider, alertProvider]);
 
     useEffect(() => {
@@ -61,9 +58,6 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
              * Once you store access token in the db add it to app state
              *  */
             fetchEtsyToken();
-        }
-        return () => {
-            clearMessages()
         }
     }, [etsyToken, success, provider, alertProvider]);
 
@@ -127,9 +121,9 @@ const ShopConnectCard: React.FC<ShopConnectCardProps> = ({
                                 buttonText="Connect"
                                 provider={provider}
                             />
-                            {provider === alertProvider && (
-                                renderAlert()
-                            )}
+                                {renderAlert()}
+                            {/* {provider === alertProvider && (
+                            )} */}
                         </CardFooter>
                     </Card>
                 )

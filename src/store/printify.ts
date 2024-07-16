@@ -44,7 +44,7 @@ const usePrintifyStore = create<PrintifyState>((set) => ({
         set((state) => ({ ...state, loading: true, error: null }));
         try {
             const data = await deletePrintifyData();
-            set((state) => ({ ...state, loading: false, data }));
+            set((state) => ({ ...state, loading: false, data: null, token: undefined }));
         } catch (error) {
             set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
         }

@@ -56,8 +56,8 @@ const SettingsPage = () => {
                         .then((data) => {
                             if (!data) return
                             const { error, success } = data
-                            if (error) setError(data.error)
-                            if (success) setSuccess(data.success)
+                            if (error) setError(error)
+                            if (success) setSuccess(success)
                             setProvider("printify")
                         })
                     }

@@ -89,7 +89,7 @@ model PasswordResetToken {
 model Printify {
   id           String   @id @default(cuid())
   userId       String   @unique
-  shopId       String
+  shopId       Int
   accessToken  String   
   refreshToken String    
   expiresAt    DateTime 
