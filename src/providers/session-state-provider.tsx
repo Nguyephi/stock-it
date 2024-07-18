@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import useUserStore from '@/store/user';
 import { Session } from 'next-auth';
 import usePrintifyStore, { selectPrintifyData, selectPrintifyToken } from '@/store/printify';
-import useEtsyStore, { selectEtsyToken } from '@/store/etsy';
+import useEtsyStore, { selectEtsyData, selectEtsyToken } from '@/store/etsy';
 interface SessionStateProviderProps {
     children: React.ReactNode;
     session: Session | null;
@@ -20,8 +20,9 @@ const SessionStateProvider: React.FC<SessionStateProviderProps> = ({ children, s
     const { fetchToken: fetchPrintifyToken, fetchData: fetchPrintifyData } = usePrintifyStore();
     const printifyToken = usePrintifyStore(selectPrintifyToken);
     const printifyData = usePrintifyStore(selectPrintifyData);
-    const { fetchToken: fetchEtsyToken } = useEtsyStore();
+    const { fetchToken: fetchEtsyToken, fetchData: fetchEtsyData } = useEtsyStore();
     const etsyToken = useEtsyStore(selectEtsyToken);
+    const etsyData = useEtsyStore(selectEtsyData);
 
     useEffect(() => {
         if (session?.user) {
@@ -46,6 +47,13 @@ const SessionStateProvider: React.FC<SessionStateProviderProps> = ({ children, s
             fetchPrintifyData()
         }
     }, [session, printifyData]);
+
+    useEffect(() => {
+        if (session && !etsyData) {
+            console.log('fetching etsy data', etsyData)
+            fetchEtsyData()
+        }
+    }, [session, etsyData]);
 
 
     return <div className="h-full">{children}</div>;

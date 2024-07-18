@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 
-export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
+export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r', 'listings_r']
 
 /**
  * initiates Etsy OAuth

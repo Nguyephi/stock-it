@@ -1,3 +1,5 @@
+"use server";
+
 import { auth } from "@/auth";
 import { getEtsyProductsByUserId, getEtsyShopDataByUserId } from "@/data/etsy";
 import { decryptToken } from "@/lib/jwt";
@@ -10,9 +12,6 @@ export const getEtsyProducts = async () => {
     }
     try {
         const etsy = await getEtsyProductsByUserId(userId);
-        if (!etsy) {
-            return { error: 'No products found' };
-        }
         return etsy;
     } catch {
         return null;
@@ -23,9 +22,11 @@ const fetchEtsyProductsByShopId = async (shopId: string, token: string) => {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-api-key': process.env.AUTH_ETSY_ID!,
         }
     });
+    console.log('etsy server response', response);
 
     if (!response.ok) {
         throw new Error(`Error fetching listings: ${response.statusText}`);
@@ -51,6 +52,7 @@ export const fetchEtsyProducts = async () => {
         const token = await decryptToken(accessToken);
 
         const getEtsyProducts = await fetchEtsyProductsByShopId(providerAccountId, token);
+        console.log('etsy server product', getEtsyProducts);
         return getEtsyProducts;
     } catch {
         return null;

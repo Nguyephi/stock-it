@@ -47,17 +47,18 @@ const useEtsyStore = create<EtsyState>((set) => ({
         // might not want to set loading for now (it might mess with provider connectin ui)
         // set((state) => ({ ...state, loading: true, error: null }));
         try {
+            console.log('etsy data');
             const data = await getEtsyProducts();
-            console.log('etsy data', data);
+            console.log('etsy data', data)
             if (!data) {
                 const storeData = await fetchEtsyProducts();
                 console.log('etsy store data', storeData);
-                set((state) => ({ ...state, data }));
+                // set((state) => ({ ...state, data }));
                 return;
             }
-            set((state) => ({ ...state, loading: false, data }));
+            // set((state) => ({ ...state, loading: false, data }));
         } catch (error) {
-            set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
+            set((state) => ({ ...state, error: "Something went wrong!" }));
         }
     },
     deleteData: async () => {
