@@ -48,7 +48,7 @@ export const fetchEtsyProducts = async () => {
             return { error: 'No access token found' };
         }
         const { access_token: accessToken, providerAccountId } = etsy;
-        const token = decryptToken(accessToken);
+        const token = await decryptToken(accessToken);
 
         const getEtsyProducts = await fetchEtsyProductsByShopId(providerAccountId, token);
         return getEtsyProducts;

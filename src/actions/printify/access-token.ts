@@ -59,7 +59,8 @@ export const fetchPrintifyAccessToken = async (values: z.infer<typeof InputSchem
             return { error: "Invalid access token!" }
         }
         const shopId = printifyStore[0].id;
-        const encryptedToken = encryptToken(token);
+        const encryptedToken = await encryptToken(token);
+        console.log("whats is token?", encryptedToken)
 
         await db.printify.upsert({
             where: { userId },
@@ -117,7 +118,7 @@ export const fetchPrintifyProducts = async () => {
             return { error: 'No access token found' };
         }
 
-        const decryptedToken = decryptToken(token);
+        const decryptedToken = await decryptToken(token);
 
         if (!decryptedToken) {
             return { error: "Invalid access token!" }

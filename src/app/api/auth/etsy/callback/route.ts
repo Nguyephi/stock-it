@@ -103,8 +103,8 @@ export async function GET(req: NextRequest) {
     }
     const user = await userData.json();
     console.log('etsy server data', user);
-    const encryptedAccessToken = encryptToken(accessToken);
-    const encryptedRefreshToken = encryptToken(refreshToken);
+    const encryptedAccessToken = await encryptToken(accessToken);
+    const encryptedRefreshToken = await encryptToken(refreshToken);
 
     /**
      * Store access token

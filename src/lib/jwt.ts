@@ -11,11 +11,11 @@ interface TokenPayload {
     token: string;
 }
 
-export const encryptToken = (token: string): string => {
+export const encryptToken = async (token: string): Promise<string> => {
     return jwt.sign({ token }, secret, { expiresIn: '3y' });
 };
 
-export const decryptToken = (token: string): string => {
+export const decryptToken = async (token: string): Promise<string> => {
     try {
         const decoded = jwt.verify(token, secret) as TokenPayload;
         return decoded.token;
