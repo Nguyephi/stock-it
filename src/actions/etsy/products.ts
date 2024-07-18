@@ -18,7 +18,7 @@ export const getEtsyProducts = async () => {
     }
 }
 const fetchEtsyProductsByShopId = async (shopId: string, token: string) => {
-    const response = await fetch(`https://openapi.etsy.com/v3/application/shops/${shopId}/listings`, {
+    const response = await fetch(`https://api.etsy.com/v3/application/shops/${shopId}/listings`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
