@@ -87,6 +87,7 @@ export async function GET(req: NextRequest) {
      * Fetch user data and delete oauth state
      */
     const providerAccountId = accessToken.split('.')[0];
+    console.log('etsy server data id', providerAccountId);
     const userData = await fetch(`https://api.etsy.com/v3/application/users/${providerAccountId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
