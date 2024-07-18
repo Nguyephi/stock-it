@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 
-import { deletePrintifyData, getPrintifyToken } from '@/actions/printify/access-token';
+import { 
+    deletePrintifyData, 
+    getPrintifyToken,
+    getPrintifyData,
+    storePrintifyProductsByUserId 
+} from '@/actions/printify/access-token';
 
 interface PrintifyState {
     token: string | undefined;
@@ -11,6 +16,7 @@ interface PrintifyState {
     fetchDataSuccess: (data: any) => void;
     fetchDataFailure: (error: string) => void;
     fetchToken: () => void;
+    fetchData: () => void;
     deleteData: () => void;
 }
 
@@ -36,6 +42,22 @@ const usePrintifyStore = create<PrintifyState>((set) => ({
                 return;
             }
             set((state) => ({ ...state, loading: false, token }));
+        } catch (error) {
+            set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
+        }
+    },
+    fetchData: async () => {
+        // might not want to set loading for now (it might mess with provider connectin ui)
+        // set((state) => ({ ...state, loading: true, error: null }));
+        try {
+            const data = await getPrintifyData();
+            if (!data) {
+                const storeData = await storePrintifyProductsByUserId();
+                const { printify } = storeData;
+                set((state) => ({ ...state, data: printify }));
+                return;
+            }
+            set((state) => ({ ...state, loading: false, data }));
         } catch (error) {
             set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
         }

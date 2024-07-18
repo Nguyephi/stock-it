@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import useUserStore from '@/store/user';
 import { Session } from 'next-auth';
-import usePrintifyStore, { selectPrintifyToken } from '@/store/printify';
+import usePrintifyStore, { selectPrintifyData, selectPrintifyToken } from '@/store/printify';
 import useEtsyStore, { selectEtsyToken } from '@/store/etsy';
 interface SessionStateProviderProps {
     children: React.ReactNode;
@@ -17,8 +17,9 @@ interface SessionStateProviderProps {
  */
 const SessionStateProvider: React.FC<SessionStateProviderProps> = ({ children, session }) => {
     const { setUser } = useUserStore();
-    const { fetchToken: fetchPrintifyToken } = usePrintifyStore();
+    const { fetchToken: fetchPrintifyToken, fetchData: fetchPrintifyData } = usePrintifyStore();
     const printifyToken = usePrintifyStore(selectPrintifyToken);
+    const printifyData = usePrintifyStore(selectPrintifyData);
     const { fetchToken: fetchEtsyToken } = useEtsyStore();
     const etsyToken = useEtsyStore(selectEtsyToken);
 
@@ -39,6 +40,13 @@ const SessionStateProvider: React.FC<SessionStateProviderProps> = ({ children, s
             fetchEtsyToken()
         }
     }, [session, etsyToken]);
+    
+    useEffect(() => {
+        if (session && !printifyData) {
+            fetchPrintifyData()
+        }
+    }, [session, printifyData]);
+
 
     return <div className="h-full">{children}</div>;
 };
