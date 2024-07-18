@@ -101,6 +101,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(redirectUrl);
     }
     const user = await userData.json();
+    console.log('etsy server data', user);
     const encryptedAccessToken = encryptToken(accessToken);
     const encryptedRefreshToken = encryptToken(refreshToken);
 
