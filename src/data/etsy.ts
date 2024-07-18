@@ -3,6 +3,22 @@ import { db } from "@/lib/db";
 export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
 
 /**
+ * initiates Etsy OAuth
+ * @returns
+ */
+export const handleEtsyOauth = async () => {
+    try {
+        const response = await fetch('/api/auth/etsy/connect');
+        const data = await response.json();
+        window.location.href = new URL(data.authorizationUrl).toString();
+        return
+    } catch (error) {
+        console.error('Error initiating Etsy OAuth:', error);
+        return { error: 'Something went wrong!' }
+    }
+}
+
+/**
  * Stores/get/delete Etsy oauth state into/from db
  * @param userId 
  * @param state 

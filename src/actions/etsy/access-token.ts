@@ -4,27 +4,6 @@ import { auth } from "@/auth";
 import { getEtsyAccessTokenByUserId, getEtsyShopDataByUserId } from "@/data/etsy";
 import { db } from "@/lib/db";
 
-/**
- * initiates Etsy OAuth
- * @returns
- */
-export const handleEtsyOauth = async () => {
-    const session = await auth();
-    const userId = session?.user?.id;
-    if (!userId) {
-        return { error: "User is not authenticated!" }
-    }
-    try {
-        const response = await fetch('/api/auth/etsy/connect');
-        const data = await response.json();
-        window.location.href = new URL(data.authorizationUrl).toString();
-        return
-    } catch (error) {
-        console.error('Error initiating Etsy OAuth:', error);
-        return { error: 'Something went wrong!' }
-    }
-}
-
 export const getEtsyToken = async () => {
     const session = await auth();
     const userId = session?.user?.id;
