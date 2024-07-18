@@ -7,7 +7,7 @@ import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
 import DashboardLayout from '../templates/DashboardLayout';
-import { handleEtsyOauth } from '@/actions/etsy/access-token';
+import { handleEtsyOauth } from '@/data/etsy';
 import { fetchPrintifyAccessToken } from '@/actions/printify/access-token';
 import useAlertStore from '@/store/alert-message';
 
