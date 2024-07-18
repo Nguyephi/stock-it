@@ -18,7 +18,7 @@ const PRINTIFY_API_URL = "https://api.printify.com/v1"
  * @param token 
  * @returns 
  */
-export const fetchPrintifyAccessTokenByPAT = async (token: string) => {
+const fetchPrintifyAccessTokenByPAT = async (token: string) => {
     const response = await fetch(`${PRINTIFY_API_URL}/shops.json`, {
         method: 'GET',
         headers: {
@@ -38,7 +38,7 @@ export const fetchPrintifyAccessTokenByPAT = async (token: string) => {
  * @param values 
  * @returns 
  */
-export const storePrintifyAccessToken = async (values: z.infer<typeof InputSchema>) => {
+export const fetchPrintifyAccessToken = async (values: z.infer<typeof InputSchema>) => {
     const session = await auth();
     const userId = session?.user?.id;
     if (!userId) {
@@ -85,7 +85,7 @@ export const storePrintifyAccessToken = async (values: z.infer<typeof InputSchem
  * @param id 
  * @returns 
  */
-export const fetchPrintifyProductsByShopId = async (token: string, id: number) => {
+const fetchPrintifyProductsByShopId = async (token: string, id: number) => {
     const response = await fetch(`${PRINTIFY_API_URL}/shops/${id}/products.json`, {
         method: 'GET',
         headers: {
@@ -104,7 +104,7 @@ export const fetchPrintifyProductsByShopId = async (token: string, id: number) =
  * Makes a request to the Printify API to get the products and stores product data in the database
  * @returns 
  */
-export const storePrintifyProductsByUserId = async () => {
+export const fetchPrintifyProducts = async () => {
     const session = await auth();
     const userId = session?.user?.id;
     if (!userId) {
@@ -161,7 +161,7 @@ export const getPrintifyToken = async () => {
     }
 }
 
-export const getPrintifyData = async () => {
+export const getPrintifyProducts = async () => {
     const session = await auth();
     const userId = session?.user?.id;
     if (!userId) {

@@ -7,8 +7,8 @@ import Title from '../atoms/Title';
 import ShopConnectCard from '../molecules/ShopConnectCard';
 import Divider from '../atoms/Divider';
 import DashboardLayout from '../templates/DashboardLayout';
-import { handleEtsyOauth } from '@/data/etsy';
-import { storePrintifyAccessToken } from '@/actions/printify/access-token';
+import { handleEtsyOauth } from '@/actions/etsy/access-token';
+import { fetchPrintifyAccessToken } from '@/actions/printify/access-token';
 import useAlertStore from '@/store/alert-message';
 
 const SettingsPage = () => {
@@ -52,7 +52,7 @@ const SettingsPage = () => {
                     provider="printify"
                     headerLabel="Connect your printify"
                     description="Grab your personal access token from printify and paste it here."
-                    handleSubmit={(values) => storePrintifyAccessToken(values)
+                    handleSubmit={(values) => fetchPrintifyAccessToken(values)
                         .then((data) => {
                             if (!data) return
                             const { error, success } = data

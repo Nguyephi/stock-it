@@ -3,21 +3,11 @@ import { db } from "@/lib/db";
 export const scopes = ['transactions_r', 'transactions_w', 'profile_r', 'email_r']
 
 /**
- * initiates Etsy OAuth
- * @returns
+ * Stores/get/delete Etsy oauth state into/from db
+ * @param userId 
+ * @param state 
+ * @param codeVerifier 
  */
-export const handleEtsyOauth = async () => {
-    try {
-        const response = await fetch('/api/auth/etsy/connect');
-        const data = await response.json();
-        window.location.href = new URL(data.authorizationUrl).toString();
-        return
-    } catch (error) {
-        console.error('Error initiating Etsy OAuth:', error);
-        return { error: 'Something went wrong!' }
-    }
-}
-
 export const storeEtsyOauthStateByUserId = async (userId: string, state: string, codeVerifier: string) => {
     const expiresAt = new Date(new Date().getTime() + 3600 * 1000);
     try {
@@ -139,7 +129,7 @@ export const getEtsyAccessTokenByUserId = async (userId: string) => {
     }
 }
 
-export const getEtsyDataByUserId = async (userId: string) => {
+export const getEtsyShopDataByUserId = async (userId: string) => {
     try {
         const accountData = await db.account.findFirst({
             where: {
@@ -162,7 +152,24 @@ export const getEtsyDataByUserId = async (userId: string) => {
     }
 }
 
-export const deleteEtsyAccessTokenProviderAccountId = async (userId: string, providerAccountId: string) => {
+export const getEtsyProductsByUserId = async (userId: string) => {
+    try {
+        const etsy = await db.etsy.findUnique({ where: { userId }});
+        return etsy?.storeData;
+    } catch {
+        return null;
+    }
+}
+
+export const deleteEtsyProductsByUserId = async (userId: string) => {
+    try {
+        await db.etsy.delete({ where: { userId }});
+    } catch {
+        return null;
+    }
+}
+
+export const deleteEtsyAccessTokenByProviderAccountId = async (providerAccountId: string) => {
     try {
         await db.account.delete({
             where: {

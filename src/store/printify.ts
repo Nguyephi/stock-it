@@ -3,8 +3,8 @@ import { create } from 'zustand';
 import { 
     deletePrintifyData, 
     getPrintifyToken,
-    getPrintifyData,
-    storePrintifyProductsByUserId 
+    getPrintifyProducts,
+    fetchPrintifyProducts 
 } from '@/actions/printify/access-token';
 
 interface PrintifyState {
@@ -50,9 +50,9 @@ const usePrintifyStore = create<PrintifyState>((set) => ({
         // might not want to set loading for now (it might mess with provider connectin ui)
         // set((state) => ({ ...state, loading: true, error: null }));
         try {
-            const data = await getPrintifyData();
+            const data = await getPrintifyProducts();
             if (!data) {
-                const storeData = await storePrintifyProductsByUserId();
+                const storeData = await fetchPrintifyProducts();
                 const { printify } = storeData;
                 set((state) => ({ ...state, data: printify }));
                 return;

@@ -1,4 +1,8 @@
-import { deleteEtsyData, getEtsyToken } from '@/actions/etsy/access-token';
+import { 
+    deleteEtsyData, 
+    getEtsyToken 
+} from '@/actions/etsy/access-token';
+import { fetchEtsyProducts, getEtsyProducts } from '@/actions/etsy/products';
 import { create } from 'zustand';
 
 interface EtsyState {
@@ -10,6 +14,7 @@ interface EtsyState {
     fetchDataSuccess: (data: any) => void;
     fetchDataFailure: (error: string) => void;
     fetchToken: () => void;
+    fetchData: () => void;
     deleteData: () => void;
 }
 
@@ -34,6 +39,23 @@ const useEtsyStore = create<EtsyState>((set) => ({
                 return;
             }
             set((state) => ({ ...state, loading: false, token }));
+        } catch (error) {
+            set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
+        }
+    },
+    fetchData: async () => {
+        // might not want to set loading for now (it might mess with provider connectin ui)
+        // set((state) => ({ ...state, loading: true, error: null }));
+        try {
+            const data = await getEtsyProducts();
+            console.log('etsy data', data);
+            if (!data) {
+                const storeData = await fetchEtsyProducts();
+                console.log('etsy store data', storeData);
+                set((state) => ({ ...state, data }));
+                return;
+            }
+            set((state) => ({ ...state, loading: false, data }));
         } catch (error) {
             set((state) => ({ ...state, loading: false, error: "Something went wrong!" }));
         }
